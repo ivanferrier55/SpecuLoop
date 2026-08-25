@@ -1,205 +1,251 @@
 # WRAP Core Specification
 
 **Status**: Provisional — reconstructed from memory, not original source
-**Date**: 2026-08-25
+**Date**: 2026-08-26
 **Confidence**: See per-section labels
 
 ---
 
 ## 1. Overview
 
-mumbleWRAP (WRAP) is persistent semantic state. It is a graph of nodes and edges representing meaning. WRAP is the authoritative knowledge store; all other representations (Mumble, Markdown, visual views) are materialized views of it.
+mumbleWRAP (WRAP) is persistent semantic state. It is a graph of nodes and edges representing meaning. WRAP is the authoritative knowledge store; Mumble, Markdown, visual views, and implementation views are materialized representations of it.
 
-**Confidence**: FOUNDATIONAL
+A useful current interpretation of WRAP is **Words Reconstructed As Primitives**. This is a memory-based hypothesis, also consistent with the idea of a software wrapper and the mumble-rap wordplay. It is not yet historically verified.
+
+**Confidence**: FOUNDATIONAL for the graph model; HYPOTHESIS for the expansion of WRAP.
 
 ---
 
 ## 2. Node
 
-A node represents a semantic unit — a concept, entity, action, property, or relation.
+A node represents a semantic unit — a concept, entity, action, property, relation, or constraint.
 
 ```python
 @dataclass
 class Node:
-    id: str                    # unique identifier (UUID or content-hash)
-    kind: str                  # type: concept, action, entity, property, state, constraint, etc.
-    label: str                 # human-readable name
-    content: str               # semantic content (free text / structured)
-    created_at: float          # timestamp
-    updated_at: float          # timestamp
-    usage_count: int = 0       # how often this node is reused
+    id: str
+    kind: str
+    label: str
+    content: str
+    created_at: float
+    updated_at: float
+    usage_count: int = 0
     metadata: dict = field(default_factory=dict)
-    lenses: dict = field(default_factory=dict)  # lens_id → {weight, relevance}
+    lenses: dict = field(default_factory=dict)
 ```
 
 ### Node Kinds (provisional)
-- `concept` — abstract idea (e.g., "speed", "quality")
-- `action` — verb-like (e.g., "increase", "decrease", "implement")
-- `entity` — concrete thing (e.g., "WRAP", "Obsidian vault")
-- `property` — attribute of something (e.g., "fast", "reliable")
+
+- `concept` — abstract idea
+- `action` — verb-like operation
+- `entity` — concrete thing
+- `property` — attribute
 - `state` — condition or situation
 - `constraint` — limitation or requirement
-- `primitive` — foundational building block, never decomposed further
+- `primitive` — semantic building block that the current basis treats as atomic
 
-**Confidence**: HYPOTHESIS — node kinds are provisional. The original system may have used different categories or no categories at all.
+**Confidence**: HYPOTHESIS — exact historical categories are unknown.
 
 ---
 
 ## 3. Edge
 
-An edge represents a semantic relationship between two nodes.
+An edge represents a semantic relationship between nodes. Relationships are not assumed to be purely causal. Examples, demonstrations, constraints, translations, opposition, and support can require different semantics.
 
 ```python
 @dataclass
 class Edge:
-    id: str                    # unique identifier
-    source: str                # source node id
-    target: str                # target node id
-    relation: str              # relationship type
-    weight: float = 1.0        # numeric strength / force
-    created_at: float = 0.0
-    updated_at: float = 0.0
+    source: str
+    target: str
+    relation: str
+    weight: float = 1.0
     metadata: dict = field(default_factory=dict)
-    lenses: dict = field(default_factory=dict)  # lens_id → {weight, relevance}
+    lenses: dict = field(default_factory=dict)
 ```
 
-### Relation Types (provisional)
-| Relation | Semantic Force | Example |
-|---|---|---|
-| `causes` | directed, positive | A → B |
-| `increases` | directed, positive magnitude | speed → quality_loss |
-| `decreases` | directed, negative magnitude | speed → quality |
-| `supports` | bidirectional, positive | A ↔ B |
-| `opposes` | bidirectional, negative | A ↔ B |
-| `requires` | directed, hard constraint | B requires A |
-| `demonstrates` | directed, evidential | A demonstrates B |
-| `clarifies` | directed, reductive | A clarifies B |
-| `motivates` | directed, directional | A motivates B |
-| `solves` | directed, directional | A solves B |
-| `contains` | directed, structural | A contains B |
-| `part_of` | directed, structural | B part_of A |
+Candidate relationship families include:
 
-**Confidence**: HYPOTHESIS — these are reconstructed guesses. Original relation names unknown.
+| Relation | Role |
+|---|---|
+| `causes` | directed causal influence |
+| `increases` | directed positive change |
+| `decreases` | directed negative change |
+| `supports` | positive semantic/evidential connection |
+| `opposes` | negative/repulsive connection |
+| `requires` | constraint/dependency |
+| `demonstrates` | evidence or example |
+| `tests` | example/experiment evaluates a hypothesis |
+| `clarifies` | reduces ambiguity |
+| `motivates` | creates pressure toward an action |
+| `solves` | addresses a problem |
+| `translates` | links representations |
+| `contains` / `part_of` | structural composition |
 
-### Numeric Forces
+**Confidence**: relationship families are reconstructed hypotheses. The exact original vocabulary is unknown.
 
-Each edge produces numeric forces used by DRAG and semantic zoom:
+### Numeric forces
 
-- `causes(A→B)`: A pushes B forward in time/causality
-- `increases(A→B)`: positive magnitude, increases weight
-- `decreases(A→B)`: negative magnitude
-- `opposes(A↔B)`: repulsion force between nodes
-- `supports(A↔B)`: attraction force between nodes
+Edges can produce numeric attraction/repulsion or directional forces. The same node pair may have different values under different semantic lenses.
 
-Force magnitude is a function of `edge.weight` and the active `lens`.
-
-**Confidence**: MEMORY — numeric forces are remembered. Exact formulas unknown.
+The historical force equation is unknown and must remain replaceable.
 
 ---
 
 ## 4. Graph
 
-The graph is the persistent, authoritative store of all WRAP state.
+The graph is persistent semantic state.
 
-```python
-@dataclass
-class Graph:
-    nodes: dict[str, Node]     # id → Node
-    edges: dict[str, Edge]     # id → Edge
-    edge_index: dict[str, list[str]]  # node_id → [edge_ids] (adjacency)
-    lenses: dict[str, "Lens"]  # id → Lens
-    created_at: float = 0.0
-    updated_at: float = 0.0
+It stores:
+
+- nodes;
+- edges;
+- lenses;
+- provenance and confidence metadata;
+- reuse/usage information.
+
+The graph should be treated as a substrate from which other views are generated, rather than as a collection of independent documents.
+
+---
+
+## 5. Primitive and Semantic Basis
+
+A primitive is a reusable semantic building block. The important property is not merely that it is short, but that it allows many clues to be represented and reconstructed.
+
+A **semantic basis** is a set of primitives sufficient to explain the current evidence.
+
+The current reconstruction suggests a minimum-sufficient-basis principle:
+
+```text
+prefer the smallest primitive basis that adequately explains
+and reconstructs the observed clue set
 ```
 
-### Operations
-- `add_node(node) → Node`
-- `add_edge(edge) → Edge`
-- `get_node(id) → Node | None`
-- `get_edges(node_id, direction) → list[Edge]`
-- `remove_node(id)` — also removes connected edges
-- `remove_edge(id)`
-- `find_nodes(query) → list[Node]` — label/content search
-- `find_similar(node_id) → list[(node_id, score)]` — based on shared edges
-- `save(path)` / `load(path)` — JSON persistence
+A newly discovered primitive may replace several older primitives when it gives better explanatory compression.
 
-**Confidence**: HIGH_CONFIDENCE — basic graph operations are well-understood.
+**Confidence**: HYPOTHESIS, strongly motivated by the recovered conversation.
 
 ---
 
-## 5. Primitive
+## 6. Clues and Compression
 
-A primitive is a node that cannot be decomposed further. It is the atomic unit of meaning in WRAP.
+Every input can be retained as a clue. Inputs need not be commands or causal statements. A clue can be:
 
-When a new input arrives and cannot be expressed using existing primitives, a new primitive is proposed (see SELF_EXTENSION.md).
+- a problem;
+- a desired capability;
+- an example;
+- a preference;
+- a constraint;
+- a correction;
+- a tool result;
+- an execution failure;
+- an observation from an agent.
 
-```python
-@dataclass
-class Primitive:
-    node: Node                 # the node itself
-    decomposition: list = field(default_factory=list)  # empty = atomic
-    synonyms: list[str] = field(default_factory=list)
+The system first attempts to decompose the clue into existing structures. Reuse is recorded.
+
+```text
+clue
+ ↓
+existing basis
+ ↓
+compressible?
+ ├─ yes → reuse / strengthen
+ └─ no  → uncertainty / investigation
 ```
 
-**Confidence**: HYPOTHESIS — the distinction between primitives and composites is assumed.
+Unresolved information should not automatically become a permanent node. It can first produce a provisional primitive hypothesis.
 
 ---
 
-## 6. Usage and Reuse
+## 7. Decoder-Aware Compression
 
-When existing nodes are reused to construct a new composite meaning, usage is tracked:
+The optimal representation may depend on the decoder. Different AI systems can require different levels of explicit information to encode or decode the same semantic structure.
 
-```python
-@dataclass
-class UsageRecord:
-    composite_id: str          # what was built
-    component_ids: list[str]   # what was reused
-    context: str               # what triggered this use
-    timestamp: float
+A useful design abstraction is:
+
+```text
+R* = f(semantic structure, decoder capability, lens, task)
 ```
 
-Usage count on nodes provides a simple frequency signal for importance/pruning.
+This makes semantic zoom a semantic operation rather than only a visual one.
 
-**Confidence**: MEDIUM_CONFIDENCE — usage tracking is remembered, exact mechanism unknown.
+A candidate primitive can be isolated and passed to a decoder. The decoder attempts to reconstruct the existing clue set. Reconstruction error becomes evidence about the usefulness of the primitive.
 
----
-
-## 7. Metadata
-
-Nodes and edges carry arbitrary metadata for extensibility:
-
-```python
-metadata: {
-    "source_text": "...",      # original input that created this
-    "provenance": [...],       # list of contributing node/edge ids
-    "confidence": float,       # system's confidence in this structure
-    "human_verified": bool,    # has a human confirmed this?
-    ...
-}
+```text
+primitive basis
+      ↓
+    decoder
+      ↓
+predicted clues
+      ↕
+actual clues
 ```
 
-**Confidence**: HIGH_CONFIDENCE — metadata is a standard extensibility pattern.
+The current implementation exposes this through an optional decoder callback and a deterministic lexical baseline.
+
+**Confidence**: HYPOTHESIS — newly reconstructed from the conversation.
 
 ---
 
-## 8. Persistence
+## 8. Uncertainty
 
-The graph is persisted as a JSON file. This is intentional for inspectability and simplicity.
+Uncertainty is treated as a property of the current semantic basis:
 
-Future options (if needed):
-- SQLite for larger graphs
-- Binary format for speed
-- Network graph format for visualization
+```text
+uncertainty ≈ inability of current representation to compress/reconstruct evidence
+```
 
-**Confidence**: FOUNDATIONAL — persistence is required. JSON is provisional.
+It should lead to action:
+
+- ask a targeted human question;
+- generate an example/test case;
+- have agents investigate;
+- execute a tool;
+- test alternative primitives;
+- compare candidate bases.
+
+A useful clarification question is therefore not arbitrary. It should target the missing distinction that would allow the clue to become compressible.
 
 ---
 
-## 9. Open Questions
+## 9. Usage and Reuse
 
-- Did the original system use a specific graph database or file format?
-- Were nodes always typed, or was typing emergent?
-- How were primitive vs. composite nodes distinguished in the original?
-- Was there a specific serialization format?
+When existing nodes are reused to construct new meaning, usage is tracked. Reuse can become a signal for semantic importance and for deciding which structures deserve persistence.
 
-Each of these is marked UNKNOWN.
+This is distinct from ordinary graph degree: many links do not necessarily mean semantic importance because links may represent opposition, support, examples, constraints, or other relationships.
+
+**Confidence**: MEDIUM/HIGH — repeated requirement in the recovered design.
+
+---
+
+## 10. Interlocked Representations
+
+Mumble, WRAP, code, commands, tool operations, and observations can be linked as translations of the same semantic state.
+
+```text
+Mumble ↔ WRAP ↔ implementation ↔ tool/reality
+```
+
+Human edits to a generated Mumble representation should propagate through provenance to the contributing WRAP structures. Implementation or execution feedback should propagate backward as evidence and constraints.
+
+---
+
+## 11. Persistence
+
+JSON is the current implementation format because it is inspectable and easy to replace. The original persistence format is unknown.
+
+The semantic solve loop should additionally preserve its evidence trail: clue, hypothesis, test, prediction, observation, score, uncertainty, and basis decision.
+
+---
+
+## 12. Open Questions
+
+- Exact historical WRAP syntax?
+- Exact primitive vocabulary?
+- Exact DRAG force equations?
+- What did remembered "backprop" actually update?
+- Did the original system isolate primitives for LLM reconstruction tests?
+- How were candidate primitive sets searched and refactored?
+- How were lenses propagated through the graph?
+- What was the original persistence format?
+
+These remain explicitly UNKNOWN/HYPOTHESIS and should not be silently promoted to historical fact.

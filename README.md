@@ -2,11 +2,11 @@
 
 **Three layers. One repository. Shared semantic model.**
 
-```
+```text
 SpecuLoop
-    ├── mumbleWRAP: semantic inertia
-    ├── DRAG: dynamic RAG / semantic reasoning
-    └── SpecuLoop: complete self-updating reasoning environment
+    ├── mumbleWRAP: persistent semantic state
+    ├── DRAG: dynamic retrieval / semantic reasoning
+    └── SpecuLoop: agents, feedback, tools, and self-update
 ```
 
 ---
@@ -17,28 +17,9 @@ SpecuLoop
 
 > How can an AI solve problems while preserving and evolving the meaning, relationships, context, provenance, uncertainty, and lessons that make its reasoning useful across time and transformations?
 
+The current reconstruction treats every incoming statement as a **clue**. The system attempts to compress that clue into existing semantic primitives. When it cannot, the failure becomes uncertainty that can drive questions, experiments, and primitive discovery.
+
 This is intentionally broader than AI memory. Memory is one substrate for solving the problem; the objective is meaningful semantic continuity and better problem solving.
-
-The repository currently provides evidence for a narrower and more established observation: **semantic drift across translations**.
-
-A human describes an intention. An AI translates that into a semantic structure. That structure becomes code. The code executes. Reality produces an observation.
-
-At each translation, meaning can drift:
-
-```
-human intention
-    → AI interpretation     (drift)
-    → semantic structure     (drift)
-    → code                  (drift)
-    → execution             (drift)
-    → observation
-```
-
-Traditional systems lose the relationship between these representations. Corrections in one layer do not propagate to others.
-
-The broader framing of semantic solving is an **organizing hypothesis**, not an experimentally proven result.
-
-See the full [Problems Map](docs/problems/README.md).
 
 ---
 
@@ -48,82 +29,125 @@ See the full [Problems Map](docs/problems/README.md).
 
 When information moves between human language, semantic structures, code, and execution, the system should preserve semantic intent. Changes and observations should propagate bidirectionally.
 
-Success means:
-
-- Meaning survives translation
-- Changes propagate correctly
-- Observations propagate backward
-- Semantic drift is reduced
-- Representations remain mutually consistent
-
----
-
-## The Architecture: Three Layers
-
-### mumbleWRAP — Semantic Inertia
-
-The persistent semantic substrate. mumbleWRAP increases semantic inertia by preserving, connecting, and accumulating meaning across incoming inputs and translations.
-
-- Tracks incoming semantic inputs
-- Decomposes new inputs into existing structures
-- Records reuse and strengthens repeated patterns
-- Preserves provenance through all translations
-- Identifies confusion and contradictions
-- Allows new primitives when needed
-
-**[mumbleWRAP docs](mumblewrap/README.md)** · [Core](mumblewrap/core/) · [Translation](mumblewrap/translation/) · [Persistence](mumblewrap/persistence/)
-
-### DRAG — Dynamic RAG / Semantic Reasoning
-
-The retrieval and reasoning layer. DRAG dynamically retrieves, compresses, and reasons over mumbleWRAP's semantic structures.
-
-- Dynamic subgraph selection
-- Semantic zoom (lens-dependent compression)
-- Semantic lenses (different views over the same graph)
-- Numerical force calculations (attraction/repulsion)
-- Graph-based visual and mathematical reasoning
-
-**[DRAG docs](drag/README.md)** · [Selector](drag/selector.py) · [Scorer](drag/scorer.py)
-
-### SpecuLoop — Complete Reasoning Environment
-
-The operational layer. SpecuLoop combines mumbleWRAP, DRAG, agent orchestration, human feedback, and execution into a continuous reasoning system.
-
-- Agent orchestration and swarm coordination
-- Human feedback propagation
-- Self-extension (new primitive proposals)
-- Execution grounding (failures become constraints)
-- Persistent system state
-
-**[SpecuLoop docs](speculoop/README.md)** · [Self-Extension](speculoop/self_extender.py) · [Feedback](speculoop/propagator.py)
-
----
-
-## The Full Translation Chain
-
-```
-Human / Agent Swarm
+```text
+human intention
     ↕
-SpecuLoop (orchestration + feedback)
+mumble
     ↕
-DRAG (reasoning + retrieval)
+WRAP semantic state
     ↕
-mumbleWRAP (semantic inertia)
+code / tools
     ↕
-Translations / Implementations / Tools
-    ↕
-Observed Reality
+observed reality
 ```
 
-Each layer retains provenance to the layer that produced it. Changes in any layer propagate through the chain.
+Each translation retains provenance so corrections can propagate rather than becoming disconnected documents.
 
 ---
 
-## Onboarding
+## mumbleWRAP — Semantic State and Compression
 
-New contributors and AI agents should start with [INTERACTION.md](INTERACTION.md) — it defines how the system responds to users and how corrections propagate as persistent knowledge.
+mumbleWRAP is the persistent semantic substrate. The current memory-based expansion of WRAP is **Words Reconstructed As Primitives**; this remains a hypothesis about the original naming.
 
-Then read [AGENTS.md](AGENTS.md) for architecture, file locations, and current hypotheses.
+The important reconstructed invariant is:
+
+```text
+clue → existing primitives → compressed representation
+                         ↓
+                     uncertainty
+                         ↓
+                 new evidence/tests
+                         ↓
+                 new or revised basis
+```
+
+Key properties:
+
+- reuse existing structures before creating new ones;
+- record how often structures are reused;
+- represent multiple relationship types, not only causality;
+- support attraction/repulsion and numeric edge weights;
+- preserve provenance between generated views and source nodes;
+- allow provisional primitives and later refactoring;
+- retain uncertainty when the current basis cannot explain evidence.
+
+See [WRAP Core](WRAP_CORE_SPEC.md) and [Semantic Solve](SEMANTIC_SOLVE.md).
+
+---
+
+## DRAG — Dynamic RAG / Semantic Reasoning
+
+DRAG is the retrieval and numerical reasoning layer. The reconstructed design includes:
+
+- dynamic subgraph selection;
+- semantic zoom;
+- task/lens-dependent projections;
+- numerical attraction/repulsion;
+- graph-based reasoning;
+- propagation/backpropagation as an unresolved historical hypothesis.
+
+Semantic zoom is not assumed to be a simple hide/show threshold. The same graph may compress differently depending on the question, lens, scope, and decoder capability.
+
+See [DRAG Core](DRAG_CORE.md) and `docs/concepts/`.
+
+---
+
+## Semantic Compression Is Decoder-Aware
+
+Different AI systems may need different amounts of explicit information to encode or decode the same semantic structure.
+
+A useful reconstruction abstraction is:
+
+```text
+R* = f(semantic structure, decoder capability, lens, task)
+```
+
+A candidate primitive can therefore be isolated and given to a decoder to see whether the decoder can reconstruct the clue set that already exists. This tests whether the primitive captures useful predictive structure rather than merely providing a short label.
+
+The current kernel exposes an optional decoder callback and a deterministic lexical baseline. An LLM adapter can be added without changing the semantic data model.
+
+---
+
+## Self-Update Loop
+
+```text
+             NEW CLUE
+                 │
+                 ▼
+        TRY EXISTING BASIS
+                 │
+          ┌──────┴──────┐
+          ▼             ▼
+      adequate      inadequate
+          │             │
+          ▼             ▼
+    reuse/strengthen  uncertainty
+                        │
+                ┌───────┼────────┐
+                ▼       ▼        ▼
+              human   agents    tools
+                │       │        │
+                └───────┼────────┘
+                        ▼
+                  test examples
+                        ▼
+                 candidate bases
+                        ▼
+               decoder reconstruction
+                        ▼
+              minimum sufficient basis
+                        │
+                 ┌──────┴──────┐
+                 ▼             ▼
+              extend        refactor
+                 └──────┬──────┘
+                        ▼
+                    persistent
+                    semantic state
+                        ↺
+```
+
+The system is intended to improve its **representation**, not merely accumulate more nodes.
 
 ---
 
@@ -133,7 +157,8 @@ Then read [AGENTS.md](AGENTS.md) for architecture, file locations, and current h
 git clone https://github.com/ivanferrier55/SpecuLoop.git
 cd SpecuLoop
 python3 demo.py
-python3 tests/test_core_loop.py
+python3 mumblewrap/tests/test_core_loop.py
+python3 mumblewrap/tests/test_semantic_reconstruction.py
 ```
 
 ### Example
@@ -143,63 +168,53 @@ from mumblewrap.api import SpecuLoop
 
 loop = SpecuLoop("knowledge.json")
 
-# Ingest: human language → mumbleWRAP
+# Existing vertical slice
 loop.ingest("Speed and quality are in tension.")
-
-# Retrieve: mumbleWRAP → human language (via DRAG)
 result = loop.query("What affects quality?")
 
-# Feedback: human edit → mumbleWRAP update
-loop.edit(result.markdown,
-    "Speed opposes quality, but good tooling reduces this tension.")
+# Semantic solve
+solve = loop.learn("Semantic zoom should compress related information.")
+print(solve.compression.coverage)
+print(solve.compression.uncertainty)
+
+# Optional decoder/LLM adapter
+solve = loop.learn(
+    "Semantic zoom should compress related information.",
+    decoder=lambda compact: compact,
+)
 ```
 
 ---
 
 ## Repository Structure
 
-```
+```text
 SpecuLoop/
-├── README.md              # This file
-├── ARCHITECTURE.md        # System architecture
-├── WHY.md                 # Engineering history
-├── mumblewrap/            # Semantic inertia layer
-│   ├── README.md
-│   ├── core/              # Node, Edge, Graph, Lens
-│   ├── translation/       # Mumble ↔ mumbleWRAP
-│   ├── persistence/       # JSON storage
-│   ├── inertia/           # (planned)
-│   └── primitives/        # (planned)
-├── drag/                  # Dynamic RAG / semantic reasoning
-│   ├── README.md
-│   ├── selector.py        # Subgraph selection
-│   ├── scorer.py          # Relevance scoring
-│   ├── lenses/            # (planned)
-│   ├── zoom/              # (planned)
-│   ├── forces/            # (planned)
-│   └── viewer/            # (planned)
-├── speculoop/             # Complete reasoning environment
-│   ├── README.md
-│   ├── self_extender.py   # New primitive proposals
-│   ├── propagator.py      # Edit propagation
-│   ├── agents/            # (planned)
-│   ├── swarm/             # (planned)
-│   └── orchestration/     # (planned)
-├── tests/                 # End-to-end tests
-├── docs/                  # Documentation
-├── examples/              # Problem-oriented examples
-└── demo.py                # Interactive demo
+├── README.md
+├── ARCHITECTURE.md
+├── RECONSTRUCTION_STATUS.md
+├── SEMANTIC_SOLVE.md
+├── WRAP_CORE_SPEC.md
+├── SELF_EXTENSION.md
+├── mumblewrap/
+│   ├── api.py
+│   ├── semantic.py
+│   ├── core/
+│   ├── translation/
+│   ├── persistence/
+│   └── tests/
+├── drag/
+├── speculoop/
+└── docs/
 ```
 
 ---
 
 ## Status
 
-This is an experimental reconstruction of a lost system. All components are designed to be replaceable. The goal is to find the smallest core that can build the rest.
+This is an experimental reconstruction of a lost system. Historical facts, strong recollections, and current implementation hypotheses are deliberately separated. The goal is to find the **smallest core that can rebuild the rest**.
 
-See [RECONSTRUCTION_STATUS.md](RECONSTRUCTION_STATUS.md) for current status.
-
----
+See [RECONSTRUCTION_STATUS.md](RECONSTRUCTION_STATUS.md) for the current evidence and implementation status.
 
 ## License
 

@@ -1,14 +1,18 @@
 # Reconstruction Status
 
-**Date**: 2026-08-25
-**Phase**: 1 — Core Kernel Implemented
+**Date**: 2026-08-26
+**Phase**: 2 — Semantic Solve Kernel
 
 ---
 
 ## 1. What Exists
 
 - Python 3.12 + Node.js 22 environment
-- Clean workspace (rebuilt from scratch)
+- Persistent WRAP graph with nodes, typed relations, numeric forces, lenses, provenance, and JSON persistence
+- Mumble ↔ WRAP translation vertical slice
+- DRAG selection/scoring kernel
+- Provisional self-extension and edit-feedback propagation
+- New model-agnostic semantic compression/self-update kernel
 
 ## 2. What Is Missing
 
@@ -19,6 +23,7 @@
 - Original persistence mechanism
 - Any test cases or examples from the original system
 - The Obsidian vault that motivated the system
+- Historical LLM/decoder reconstruction mechanism
 
 ## 3. Assumptions Being Made
 
@@ -32,6 +37,9 @@
 | Nodes have a concept/primitive distinction | HYPOTHESIS | Logical requirement, not directly remembered |
 | Semantic zoom compresses via graph structure | MEMORY | Concept remembered |
 | Provenance tracks WRAP→Mumble mapping | HIGH_CONFIDENCE | Core requirement |
+| Compression quality is decoder-dependent | HYPOTHESIS | Current reconstruction clue |
+| Isolated primitives can be tested by LLM reconstruction | HYPOTHESIS | Current reconstruction clue, explicitly uncertain |
+| Uncertainty should trigger experiments/questions | HIGH_CONFIDENCE | Repeated system behavior described |
 
 ## 4. Implemented Kernel
 
@@ -39,35 +47,30 @@
 
 ```
 SpecuLoop/
-├── RECONSTRUCTION_STATUS.md    # This file
-├── WRAP_CORE_SPEC.md           # Node, Edge, Graph, Primitive specification
-├── INTERLOCKED_TRANSLATION.md  # Mumble ↔ WRAP translation spec
-├── DRAG_CORE.md                # Graph selection/scoring spec
-├── SELF_EXTENSION.md           # New primitive proposal spec
-├── demo.py                     # Interactive demo
+├── RECONSTRUCTION_STATUS.md
+├── SEMANTIC_SOLVE.md         # decoder-aware semantic compression loop
+├── WRAP_CORE_SPEC.md
+├── INTERLOCKED_TRANSLATION.md
+├── DRAG_CORE.md
+├── SELF_EXTENSION.md
+├── demo.py
 └── mumblewrap/
     ├── __init__.py
-    ├── api.py                  # SpecuLoop — main interface
+    ├── api.py
+    ├── semantic.py            # clue compression + provisional basis testing
     ├── core/
-    │   ├── node.py             # Node dataclass
-    │   ├── edge.py             # Edge dataclass + relation forces
-    │   ├── graph.py            # Graph with persistence
-    │   └── lens.py             # Lens dataclass
+    │   ├── node.py
+    │   ├── edge.py
+    │   ├── graph.py
+    │   └── lens.py
     ├── translation/
-    │   ├── translator.py       # Orchestrates Mumble ↔ WRAP
-    │   ├── decomposer.py       # Text → graph structures
-    │   └── composer.py         # Graph → Mumble Markdown
     ├── drag/
-    │   ├── selector.py         # Subgraph selection (replaceable)
-    │   └── scorer.py           # Node/edge scoring (replaceable)
     ├── extension/
-    │   └── self_extender.py    # New primitive proposals
     ├── feedback/
-    │   └── propagator.py       # Edit feedback → WRAP update
     ├── persistence/
-    │   └── store.py            # JSON graph persistence
     └── tests/
-        └── test_core_loop.py   # End-to-end test (9 tests, all passing)
+        ├── test_core_loop.py
+        └── test_semantic_reconstruction.py
 ```
 
 ### Component Status
@@ -78,63 +81,72 @@ SpecuLoop/
 | Edge | ✅ Implemented | With relation forces, weight, metadata |
 | Graph | ✅ Implemented | Add/remove/find, JSON persistence |
 | Lens | ✅ Implemented | Weight modifiers for nodes/edges/kinds |
-| Decomposer | ✅ Implemented | Pattern-matching (keyword/phrase → relation) |
+| Decomposer | ✅ Implemented | Pattern-matching baseline; replaceable by LLM/embedding decomposition |
 | Composer | ✅ Implemented | Template-based Mumble Markdown generation |
-| Translator | ✅ Implemented | Orchestrates ingest/emit |
+| Translator | ✅ Implemented | Orchestrates Mumble/WRAP ingest and emit |
 | DRAG Selector | ✅ Implemented | Score-based with propagation |
-| Scorer | ✅ Implemented | Text match + edge density + usage |
-| Self-Extender | ✅ Implemented | Proposes new primitives |
+| Scorer | ✅ Implemented | Baseline text match + edge density + usage |
+| Self-Extender | ✅ Implemented | Provisional primitive proposals |
 | Feedback | ✅ Implemented | Provenance-based edit propagation |
 | Persistence | ✅ Implemented | JSON save/load |
+| Semantic Learner | 🆕 Implemented | Compression, uncertainty, provisional candidates, decoder callback |
+| Basis scoring | 🆕 Implemented | Complexity + reconstruction-error baseline |
 
-## 5. Verified Vertical Slice
+## 5. New Core Loop
 
-The following loop demonstrably works:
-
-```
-"Speed and quality are in tension."
-    ↓ ingest
-WRAP: Speed --[opposes]--> quality
-    ↓ emit
-"Speed opposes quality." (with provenance metadata)
-    ↓ human edit
-"Speed opposes quality, but good tooling reduces this tension."
-    ↓ propagate
-WRAP updated (new concepts detected, edges adjusted)
-```
-
-### Test Results
-
-```
-✓ test_node_creation
-✓ test_edge_creation
-✓ test_graph_persistence
-✓ test_ingest_simple
-✓ test_emit_markdown
-✓ test_full_vertical_slice
-✓ test_drag_query
-✓ test_self_extension
-✓ test_lens
-9/9 passed
+```text
+clue
+  ↓
+existing semantic basis
+  ↓
+compress / reconstruct
+  ├─ adequate → reuse + strengthen
+  └─ inadequate → uncertainty
+                    ↓
+              candidate primitive
+                    ↓
+             optional decoder test
+                    ↓
+             evidence for/refuting basis
+                    ↓
+              accept / revise / ask
+                    ↺
 ```
 
-## 6. Known Limitations
+The kernel deliberately does **not** auto-accept new primitives. This preserves uncertainty and allows human or agent validation.
+
+## 6. Verified Semantic Slice
+
+The new tests cover:
+
+- existing primitive coverage;
+- provisional primitive generation when compression is weak;
+- accepting a candidate and reusing it on later clues;
+- separating structural coverage from optional decoder reconstruction score.
+
+The decoder interface is provider-neutral. An LLM can be connected later without changing the semantic kernel.
+
+## 7. Known Limitations
 
 1. **Decomposer is pattern-based** — only handles known verb/phrase patterns. Needs LLM integration for arbitrary text.
 2. **Edit propagation is heuristic** — uses keyword matching, not semantic understanding.
-3. **DRAG scoring is simple** — text overlap + edge density. Needs embedding-based scoring.
-4. **No backprop yet** — `process_feedback` exists but isn't wired into the main loop.
-5. **Duplicate sentences in DRAG output** — propagation can emit the same edge multiple times (needs deduplication).
-6. **No semantic zoom compression** — `compress()` exists but isn't integrated into emit.
-7. **No visual/graph output** — only text-based Markdown.
+3. **DRAG scoring is simple** — text overlap + edge density. Needs embedding-based scoring and the recovered force equations.
+4. **Backprop is not recovered** — the word is remembered, but its mechanism is unknown.
+5. **Semantic zoom is not yet a true lens-dependent graph coarsening algorithm.**
+6. **Semantic learner uses lexical overlap as a baseline** — this is intentionally replaceable by embeddings or LLM reconstruction.
+7. **Primitive replacement/refactoring is not automated yet.**
+8. **Generated test cases and multi-agent experiments are not yet orchestrated.**
+9. **No visual/graph output yet.**
 
-## 7. Next Steps
+## 8. Next Steps
 
-1. **LLM integration for decomposer** — replace pattern matching with semantic understanding
-2. **Embedding-based scoring** — replace text overlap with vector similarity
-3. **Backprop integration** — wire `process_feedback` into the main loop
-4. **Semantic zoom in emit** — use `compress()` to control detail level
-5. **Graph visualization** — export to dot/graphviz or interactive format
-6. **Obsidian integration** — bidirectional sync with vault files
-7. **Multi-agent support** — concurrent graph access with locking
-8. **Self-improvement loop** — system proposes and tests its own improvements
+1. Add an LLM adapter for decomposition and decoder reconstruction tests.
+2. Replace lexical overlap with embedding/semantic similarity while retaining deterministic fallbacks.
+3. Add explicit evidence/test/proposal records to persistent storage.
+4. Implement basis search: compare existing primitives against candidate replacements.
+5. Implement lens-dependent graph coarsening/semantic zoom.
+6. Recover or derive a replaceable numerical DRAG force model.
+7. Add generated test cases and agent experiment orchestration.
+8. Wire reality/tool failures back into the same semantic evidence loop.
+9. Add graph visualization.
+10. Integrate Obsidian bidirectional sync when the vault becomes available.

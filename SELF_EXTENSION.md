@@ -1,156 +1,147 @@
 # Self-Extension Specification
 
 **Status**: Provisional — reconstructed from memory
-**Date**: 2026-08-25
+**Date**: 2026-08-26
 **Confidence**: See per-section labels
 
 ---
 
 ## 1. Overview
 
-Self-extension is the system's ability to grow its own semantic vocabulary when existing structures are insufficient. This is essential for a system that must represent arbitrary human knowledge.
+Self-extension is the ability of the semantic basis to change when existing structures cannot adequately compress or reconstruct new evidence.
 
-**Confidence**: FOUNDATIONAL
-
----
-
-## 2. The Problem
-
-When a new input arrives, the system attempts to decompose it into existing WRAP nodes and edges. Sometimes this fails:
-
-- No existing node matches a concept in the input
-- No existing edge captures the relationship expressed
-- The input introduces a genuinely new type of structure
-
-In these cases, the system must propose new structures rather than silently failing or losing information.
-
-**Confidence**: FOUNDATIONAL
+The key distinction is **proposal versus acceptance**: an unresolved clue can generate a candidate primitive without immediately making that candidate authoritative.
 
 ---
 
-## 3. Extension Interface
+## 2. Core Flow
 
-```python
-class SelfExtender:
-    def attempt_decompose(self, text: str, graph: Graph) -> DecompositionResult:
-        """
-        Try to decompose text into existing structures.
-        Returns DecompositionResult with:
-          - success: bool
-          - reused: list of (node_ids, edge_ids) used
-          - gaps: list of unresolved spans (text that couldn't be decomposed)
-          - confidence: float
-        """
-    
-    def propose_primitive(self, text: str, context: list[str]) -> Primitive:
-        """
-        Propose a new primitive node for a concept that doesn't exist.
-        Returns a proposed Primitive with suggested kind, label, and content.
-        """
-    
-    def propose_relation(self, source_id: str, target_id: str, 
-                         context: str) -> Edge:
-        """
-        Propose a new edge type for a relationship that doesn't exist.
-        Returns a proposed Edge with suggested relation type.
-        """
-    
-    def confirm(self, proposal_id: str, human_feedback: str):
-        """
-        Human confirms or modifies a proposal.
-        Confirmed proposals are added to the graph.
-        Modified proposals are adjusted and then added.
-        Rejected proposals are recorded but not added.
-        """
+```text
+new clue
+  ↓
+attempt decomposition into existing primitives
+  ↓
+adequate?
+ ├─ yes → reuse + strengthen usage
+ └─ no  → uncertainty
+             ↓
+       generate hypotheses
+             ↓
+       generate examples/tests
+             ↓
+       evaluate candidate bases
+             ↓
+       choose minimum sufficient basis
+             ↓
+       accept / modify / reject
 ```
 
-**Confidence**: HIGH_CONFIDENCE — the interface is clear; proposal mechanism is provisional.
+This replaces a simple "unknown word → create node" strategy with semantic model selection.
 
 ---
 
-## 4. Proposal Flow
+## 3. Candidate Primitive
 
+A candidate records:
+
+- unresolved clue/evidence;
+- proposed primitive;
+- alternative decompositions;
+- supporting examples/tests;
+- predicted reconstruction;
+- observed reconstruction;
+- compression score;
+- decoder score when available;
+- uncertainty;
+- status: `pending`, `accepted`, `modified`, or `rejected`.
+
+Candidates remain provisional until accepted.
+
+---
+
+## 4. Active Testing
+
+Uncertainty can cause the system to construct its own examples rather than immediately asking the human.
+
+An example may:
+
+- test a primitive;
+- distinguish two candidate interpretations;
+- demonstrate a relationship;
+- expose a contradiction;
+- provide a regression test for a previously learned structure.
+
+Agents can generate and execute such tests when they have the required capabilities.
+
+---
+
+## 5. Decoder Reconstruction Test
+
+A candidate primitive or basis can be isolated and supplied to a decoder. The decoder attempts to reconstruct the clue set that motivated the primitive.
+
+```text
+candidate basis
+      ↓
+    decoder
+      ↓
+predicted clue set
+      ↕
+observed clue set
+      ↓
+reconstruction score
 ```
-input text
-    ↓
-attempt_decompose()
-    ↓
-success? → use existing structures
-    ↓ (failure)
-propose_primitive() for unrecognized concepts
-    ↓
-propose_relation() for unrecognized relationships
-    ↓
-present proposals to human (or auto-accept with low confidence)
-    ↓
-human confirms / modifies / rejects
-    ↓
-confirmed proposals become new WRAP structures
+
+Different decoders may require different representation granularity. Therefore decoder capability is part of the compression context.
+
+This mechanism is currently a **hypothesis**, but the kernel exposes an optional decoder callback so it can be tested experimentally.
+
+---
+
+## 6. Basis Selection
+
+The current provisional objective is:
+
+```text
+basis score = reconstruction error + complexity penalty
 ```
 
-**Confidence**: HIGH_CONFIDENCE
+The desired behavior is to prefer the smallest basis that adequately explains the evidence. This permits semantic refactoring:
 
----
-
-## 5. Proposal Quality
-
-Proposals should be:
-
-- **Specific**: not too vague, not too narrow
-- **Justified**: explain why this primitive/relation is needed
-- **Testable**: can be validated against future inputs
-- **Mergeable**: can be combined with existing nodes if a match is found later
-
-### Proposal Metadata
-
-```python
-@dataclass
-class Proposal:
-    id: str
-    kind: str                   # "primitive" or "relation"
-    proposed_structure: Node | Edge
-    reason: str                 # why this is needed
-    alternatives: list[str]     # other ways this could be represented
-    confidence: float           # system's confidence in this proposal
-    source_text: str            # the input that triggered this
-    created_at: float
-    status: str = "pending"     # pending, confirmed, modified, rejected
+```text
+old: P1 + P2 + P3
+          ↓
+new:       P4
 ```
 
-**Confidence**: MEDIUM_CONFIDENCE
+when P4 captures the same evidence with better reconstruction and lower complexity.
+
+The exact historical objective function is unknown.
 
 ---
 
-## 6. Learning from Proposals
+## 7. Learning from Feedback
 
-Over time, the system should:
+Evidence comes from multiple sources:
 
-1. Track which proposals are confirmed → increase confidence for similar proposals
-2. Track which proposals are rejected → decrease confidence for similar proposals
-3. Identify patterns in rejections → refine the proposal algorithm
-4. Eventually propose structures that humans consistently accept
+- human feedback;
+- agent-generated tests;
+- tool results;
+- execution failures;
+- constraints;
+- future observations.
 
-This is the beginning of the self-improvement loop.
+All should be represented as evidence rather than as a separate memory system.
 
-**Confidence**: HYPOTHESIS — the concept is clear; the mechanism is speculative.
-
----
-
-## 7. Guardrails
-
-- Never auto-create nodes without recording that they are provisional
-- Always present human review for low-confidence proposals
-- Limit the number of proposals per input (prevent explosion)
-- If too many proposals are needed, suggest that the input may need decomposition at a higher level
-- Track total graph growth rate to prevent unbounded expansion
-
-**Confidence**: MEDIUM_CONFIDENCE
+Repeated confirmation strengthens a semantic structure. Contradictory evidence increases uncertainty and may trigger basis revision.
 
 ---
 
-## 8. Open Questions
+## 8. Guardrails
 
-- How did the original system handle genuinely novel concepts?
-- Was there automatic primitive creation or always human-in-the-loop?
-- How were proposals validated?
-- Was there a concept of "proven" vs. "unproven" primitives?
+- Never hide provisional status.
+- Preserve the evidence trail for every primitive change.
+- Prefer reuse before creating a new primitive.
+- Do not equate graph degree with semantic importance.
+- Prevent uncontrolled primitive explosion.
+- Allow rollback/refactoring when a later basis explains earlier evidence better.
+- Keep historical claims separate from reconstruction hypotheses.

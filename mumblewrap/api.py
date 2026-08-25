@@ -1,7 +1,7 @@
 """SpecuLoop: the complete self-updating reasoning environment.
 
-Combines mumbleWRAP (semantic inertia), DRAG (dynamic RAG / semantic reasoning),
-and agent orchestration with human feedback and execution grounding.
+Combines mumbleWRAP (semantic state), DRAG (dynamic retrieval/reasoning),
+and semantic compression with human feedback and execution grounding.
 """
 from __future__ import annotations
 from pathlib import Path
@@ -13,6 +13,7 @@ from mumblewrap.core.lens import Lens
 from mumblewrap.translation.translator import Translator, TranslationResult
 from mumblewrap.translation.decomposer import Decomposer
 from mumblewrap.translation.composer import Composer, CompositionResult
+from mumblewrap.semantic import CompressionResult, SemanticLearner
 from drag.selector import DRAGSelector, Subgraph
 from drag.scorer import Scorer
 from speculoop.self_extender import SelfExtender, Proposal
@@ -23,10 +24,9 @@ from mumblewrap.persistence.store import Store
 class SpecuLoop:
     """The complete self-updating reasoning environment.
 
-    Combines:
-    - mumbleWRAP: persistent semantic substrate (semantic inertia)
-    - DRAG: dynamic retrieval and semantic reasoning
-    - Agent orchestration with human feedback
+    The semantic learner adds a model-agnostic core loop:
+    observe → compress → measure uncertainty → propose/test a new basis.
+    New primitives remain provisional until explicitly accepted.
     """
 
     def __init__(self, graph_path: str | Path = "wrap_graph.json"):
@@ -37,10 +37,29 @@ class SpecuLoop:
         self.drag = DRAGSelector(self.graph, self.scorer)
         self.extender = SelfExtender()
         self.feedback = FeedbackPropagator(self.graph)
+        self.semantic = SemanticLearner(self.graph)
 
     def ingest(self, text: str) -> TranslationResult:
         """Ingest human language into mumbleWRAP."""
         result = self.translator.ingest(text)
+        self.store.save(self.graph)
+        return result
+
+    def learn(self, text: str, decoder=None) -> "SemanticSolveResult":
+        """Run the recovered semantic compression loop.
+
+        The text is first ingested so existing nodes can be reused and usage
+        recorded. The semantic learner then evaluates how well the resulting
+        graph explains the clue. A decoder callback may be an LLM adapter; it
+        receives the compact reconstruction and returns generated text.
+        """
+        translation = self.ingest(text)
+        compression = self.semantic.observe(text, decoder=decoder)
+        return SemanticSolveResult(translation=translation, compression=compression)
+
+    def accept_candidate(self, candidate: Node) -> Node:
+        """Accept a provisional semantic primitive and persist it."""
+        result = self.semantic.accept_candidate(candidate)
         self.store.save(self.graph)
         return result
 
@@ -92,3 +111,19 @@ class SpecuLoop:
         self.graph.add_lens(lens)
         self.store.save(self.graph)
         return lens
+
+
+class SemanticSolveResult:
+    """Combined translation and semantic-compression result."""
+
+    def __init__(self, translation: TranslationResult, compression: CompressionResult):
+        self.translation = translation
+        self.compression = compression
+
+    @property
+    def uncertainty(self) -> float:
+        return self.compression.uncertainty
+
+    @property
+    def candidate(self) -> Node | None:
+        return self.compression.candidate
