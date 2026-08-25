@@ -48,13 +48,14 @@ class SpecuLoop:
     def learn(self, text: str, decoder=None) -> "SemanticSolveResult":
         """Run the recovered semantic compression loop.
 
-        The text is first ingested so existing nodes can be reused and usage
-        recorded. The semantic learner then evaluates how well the resulting
-        graph explains the clue. A decoder callback may be an LLM adapter; it
-        receives the compact reconstruction and returns generated text.
+        Compression is evaluated against the *pre-ingest* basis. This is
+        important: a genuinely new clue must be allowed to register as
+        uncertain before the ordinary translator adds its surface concepts.
+        The resulting translation is then persisted, while the provisional
+        candidate remains separate until accepted.
         """
-        translation = self.ingest(text)
         compression = self.semantic.observe(text, decoder=decoder)
+        translation = self.ingest(text)
         return SemanticSolveResult(translation=translation, compression=compression)
 
     def accept_candidate(self, candidate: Node) -> Node:
