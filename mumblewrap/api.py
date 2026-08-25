@@ -1,4 +1,4 @@
-"""SpecuLoop: the complete self-updating reasoning environment.
+"""SpecuLoop: the self-updating semantic reasoning environment.
 
 Combines mumbleWRAP (semantic state), DRAG (dynamic retrieval/reasoning),
 and semantic compression with human feedback and execution grounding.
@@ -13,7 +13,7 @@ from mumblewrap.core.lens import Lens
 from mumblewrap.translation.translator import Translator, TranslationResult
 from mumblewrap.translation.decomposer import Decomposer
 from mumblewrap.translation.composer import Composer, CompositionResult
-from mumblewrap.semantic import CompressionResult, SemanticLearner
+from mumblewrap.semantic import CompressionResult, RefactorProposal, SemanticLearner
 from drag.selector import DRAGSelector, Subgraph
 from drag.scorer import Scorer
 from speculoop.self_extender import SelfExtender, Proposal
@@ -24,8 +24,8 @@ from mumblewrap.persistence.store import Store
 class SpecuLoop:
     """The complete self-updating reasoning environment.
 
-    The semantic learner adds a model-agnostic core loop:
-    observe → compress → measure uncertainty → propose/test a new basis.
+    The semantic learner provides the experimental core:
+    observe → compress → measure uncertainty → test hypotheses → refactor the basis.
     New primitives remain provisional until explicitly accepted.
     """
 
@@ -45,22 +45,53 @@ class SpecuLoop:
         self.store.save(self.graph)
         return result
 
-    def learn(self, text: str, decoder=None) -> "SemanticSolveResult":
-        """Run the recovered semantic compression loop.
+    def learn(
+        self,
+        text: str,
+        decoder=None,
+        *,
+        lens: str | None = None,
+        task: str | None = None,
+        decoder_name: str | None = None,
+    ) -> "SemanticSolveResult":
+        """Run semantic compression before committing the ordinary translation.
 
-        Compression is evaluated against the *pre-ingest* basis. This is
-        important: a genuinely new clue must be allowed to register as
-        uncertain before the ordinary translator adds its surface concepts.
-        The resulting translation is then persisted, while the provisional
-        candidate remains separate until accepted.
+        ``lens`` and ``task`` make the semantic solve contextual.  The current
+        graph is scored before ingestion so a new clue can remain genuinely
+        uncertain instead of being made artificially compressible by its own
+        newly-created nodes.
         """
-        compression = self.semantic.observe(text, decoder=decoder)
+        compression = self.semantic.observe(
+            text,
+            decoder=decoder,
+            lens=lens,
+            task=task,
+            decoder_name=decoder_name,
+        )
         translation = self.ingest(text)
         return SemanticSolveResult(translation=translation, compression=compression)
 
     def accept_candidate(self, candidate: Node) -> Node:
         """Accept a provisional semantic primitive and persist it."""
         result = self.semantic.accept_candidate(candidate)
+        self.store.save(self.graph)
+        return result
+
+    def propose_refactor(
+        self,
+        old_primitive_ids: list[str],
+        candidate: Node,
+    ) -> RefactorProposal | None:
+        """Compare a candidate primitive against an existing basis without mutation."""
+        return self.semantic.propose_refactor(old_primitive_ids, candidate)
+
+    def accept_refactor(
+        self,
+        proposal: RefactorProposal,
+        minimum_improvement: float = 0.05,
+    ) -> Node:
+        """Accept a measured basis refactor while retaining superseded nodes."""
+        result = self.semantic.accept_refactor(proposal, minimum_improvement)
         self.store.save(self.graph)
         return result
 
@@ -128,3 +159,7 @@ class SemanticSolveResult:
     @property
     def candidate(self) -> Node | None:
         return self.compression.candidate
+
+    @property
+    def evidence_id(self) -> str | None:
+        return self.compression.evidence_id
