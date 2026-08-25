@@ -12,14 +12,14 @@ from pathlib import Path
 # Add parent to path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
-from wrap.core import Node, Edge, Graph, Lens
-from wrap.translation import Translator, Decomposer, Composer
-from wrap.drag import DRAGSelector, Subgraph
-from wrap.drag.scorer import Scorer
-from wrap.extension import SelfExtender, Proposal
-from wrap.feedback import FeedbackPropagator, EditResult
-from wrap.persistence import Store
-from wrap.api import SpecuLoop
+from mumblewrap.core import Node, Edge, Graph, Lens
+from mumblewrap.translation import Translator, Decomposer, Composer
+from mumblewrap.drag import DRAGSelector, Subgraph
+from mumblewrap.drag.scorer import Scorer
+from mumblewrap.extension import SelfExtender, Proposal
+from mumblewrap.feedback import FeedbackPropagator, EditResult
+from mumblewrap.persistence import Store
+from mumblewrap.api import SpecuLoop
 
 
 def test_node_creation():

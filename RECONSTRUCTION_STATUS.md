@@ -45,7 +45,7 @@ SpecuLoop/
 ├── DRAG_CORE.md                # Graph selection/scoring spec
 ├── SELF_EXTENSION.md           # New primitive proposal spec
 ├── demo.py                     # Interactive demo
-└── wrap/
+└── mumblewrap/
     ├── __init__.py
     ├── api.py                  # SpecuLoop — main interface
     ├── core/

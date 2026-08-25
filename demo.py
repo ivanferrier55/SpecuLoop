@@ -9,8 +9,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
 
-from wrap.api import SpecuLoop
-from wrap.core import Lens
+from mumblewrap.api import SpecuLoop
+from mumblewrap.core import Lens
 
 
 def main():

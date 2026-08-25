@@ -8,7 +8,7 @@
 
 ## 1. Overview
 
-WRAP is persistent semantic state. It is a graph of nodes and edges representing meaning. WRAP is the authoritative knowledge store; all other representations (Mumble, Markdown, visual views) are materialized views of it.
+mumbleWRAP (WRAP) is persistent semantic state. It is a graph of nodes and edges representing meaning. WRAP is the authoritative knowledge store; all other representations (Mumble, Markdown, visual views) are materialized views of it.
 
 **Confidence**: FOUNDATIONAL
 

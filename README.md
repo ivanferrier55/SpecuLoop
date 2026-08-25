@@ -1,4 +1,4 @@
-# SpecuLoop — WRAP Semantic Engine
+# mumbleWRAP
 
 **Status**: Phase 1 — Core kernel implemented and tested
 **Date**: 2026-08-25
@@ -7,18 +7,25 @@
 
 ## What Is This?
 
-WRAP is persistent semantic state. It's a graph-based knowledge representation that sits between human-readable text (Mumble) and structured knowledge, enabling bidirectional translation.
+mumbleWRAP (WRAP) is persistent semantic state. It's a graph-based knowledge representation that sits between human-readable text (Mumble) and structured knowledge, enabling bidirectional translation.
 
 This is a reconstruction of a lost system, built from memory fragments and design hypotheses.
 
 ## Quick Start
 
 ```bash
-# Run the demo
-python3 demo.py
+# Install dependencies (Termux)
+pkg install git python
+
+# Clone
+git clone https://github.com/ivanferrier55/SpecuLoop.git
+cd SpecuLoop
 
 # Run tests
-python3 wrap/tests/test_core_loop.py
+python mumblewrap/tests/test_core_loop.py
+
+# Run demo
+python demo.py
 ```
 
 ## Core Concept
@@ -26,13 +33,13 @@ python3 wrap/tests/test_core_loop.py
 ```
 Mumble input (plain text)
     ↓ decompose
-WRAP graph (nodes + edges + forces)
+mumbleWRAP graph (nodes + edges + forces)
     ↓ select (DRAG)
 Subgraph (relevant portion)
     ↓ compose
 Mumble Markdown (with provenance)
     ↓ human edit
-WRAP update (propagate changes back)
+mumbleWRAP update (propagate changes back)
 ```
 
 ## Architecture
@@ -45,12 +52,12 @@ Every component is replaceable. The initial implementation uses:
 
 ## Key Files
 
-- `wrap/api.py` — Main interface (`SpecuLoop` class)
-- `wrap/core/` — Node, Edge, Graph, Lens
-- `wrap/translation/` — Mumble ↔ WRAP translation
-- `wrap/drag/` — Subgraph selection and scoring
-- `wrap/extension/` — Self-extension proposals
-- `wrap/feedback/` — Edit propagation
+- `mumblewrap/api.py` — Main interface (`SpecuLoop` class)
+- `mumblewrap/core/` — Node, Edge, Graph, Lens
+- `mumblewrap/translation/` — Mumble ↔ mumbleWRAP translation
+- `mumblewrap/drag/` — Subgraph selection and scoring
+- `mumblewrap/extension/` — Self-extension proposals
+- `mumblewrap/feedback/` — Edit propagation
 
 ## Specifications
 
