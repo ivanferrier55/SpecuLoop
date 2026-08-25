@@ -1,38 +1,123 @@
 # SpecuLoop
 
-**Three layers. One repository. Shared semantic model.**
+**A semantic reasoning system that tests and refactors its own representation.**
 
 ```text
 SpecuLoop
-    ├── mumbleWRAP: persistent semantic state
-    ├── DRAG: dynamic retrieval / semantic reasoning
-    └── SpecuLoop: agents, feedback, tools, and self-update
+    ├── mumbleWRAP: persistent semantic state / primitive basis
+    ├── DRAG: lens-dependent retrieval, forces, and semantic zoom
+    └── SpecuLoop: agents, tests, tools, feedback, and reality constraints
 ```
 
 ---
 
-## The Primary Problem: Semantic Solving
+## The Core Research Question
 
-**Semantic solving** is the central problem SpecuLoop is exploring:
+> **Can an AI preserve and improve meaning by compressing observations into reusable semantic primitives, testing those primitives against new evidence, and refactoring the semantic basis when a better explanation emerges?**
 
-> How can an AI solve problems while preserving and evolving the meaning, relationships, context, provenance, uncertainty, and lessons that make its reasoning useful across time and transformations?
+The current reconstruction treats every incoming statement as a **clue**. The system first tries to express the clue using existing primitives. If that representation is inadequate, the mismatch becomes uncertainty that can drive human questions, agent-generated examples, tool execution, decoder tests, and candidate primitive discovery.
 
-The current reconstruction treats every incoming statement as a **clue**. The system attempts to compress that clue into existing semantic primitives. When it cannot, the failure becomes uncertainty that can drive questions, experiments, and primitive discovery.
-
-This is intentionally broader than AI memory. Memory is one substrate for solving the problem; the objective is meaningful semantic continuity and better problem solving.
+This is intentionally broader than AI memory. Memory is the persistent substrate; the objective is a semantic model that can improve its own ability to represent, retrieve, test, and translate information.
 
 ---
 
-## The Goal: Preserve Meaning Across Translations
+## The Core Loop
 
-> **Preservation and propagation of meaning across translations.**
+```text
+                    NEW CLUE
+                        │
+                        ▼
+                EXISTING BASIS
+                        │
+                ┌───────┴───────┐
+                ▼               ▼
+             adequate       inadequate
+                │               │
+                ▼               ▼
+         reuse / strengthen  uncertainty
+                                │
+                 ┌──────────────┼──────────────┐
+                 ▼              ▼              ▼
+              human          agents          tools
+                 │              │              │
+                 └──────────────┼──────────────┘
+                                ▼
+                         hypotheses / tests
+                                ▼
+                     candidate semantic bases
+                                ▼
+                    decoder reconstruction
+                                ▼
+                     minimum sufficient basis
+                                │
+                       ┌────────┴────────┐
+                       ▼                 ▼
+                    extend            refactor
+                       └────────┬────────┘
+                                ▼
+                       persistent WRAP state
+                                ↺
+```
 
-When information moves between human language, semantic structures, code, and execution, the system should preserve semantic intent. Changes and observations should propagate bidirectionally.
+The system is intended to improve its **representation**, not merely accumulate more nodes.
+
+See [Semantic Solve](SEMANTIC_SOLVE.md).
+
+---
+
+## Why Semantic Compression?
+
+Ordinary retrieval asks:
+
+> Which documents should I retrieve?
+
+SpecuLoop explores a different question:
+
+> **What reusable semantic basis allows the relevant information to be represented and reconstructed without repeatedly carrying every underlying document?**
+
+The system records primitive reuse, unresolved evidence, uncertainty, and the tests that justify changes to the basis. A good compression is therefore not just a short summary: it should preserve enough structure for the intended decoder, task, and lens to recover useful meaning.
+
+### Decoder-aware representation
+
+Different AI systems may require different amounts of explicit information to reconstruct the same semantic structure:
+
+```text
+R* = f(semantic structure, decoder capability, lens, task)
+```
+
+This is a design hypothesis, not a recovered historical equation. The kernel exposes an optional decoder callback so the hypothesis can be tested without committing to a particular LLM provider.
+
+---
+
+## Evidence and Self-Refactoring
+
+Semantic changes are not supposed to become unexplained permanent facts. The system records evidence associated with compression decisions:
+
+```text
+clue
+primitive hypothesis
+test / prediction
+observed result
+compression score
+uncertainty
+lens / task / decoder
+basis decision
+```
+
+A candidate primitive can be evaluated against an existing basis before it is accepted. When a candidate materially improves the explanatory score, the old primitives can be marked **superseded** rather than deleted. This preserves provenance and allows later evidence to revisit the decision.
+
+That makes primitive discovery closer to an experimental/scientific loop than to ordinary automatic summarization.
+
+---
+
+## Preserving Meaning Across Translations
+
+The broader system is designed around interlocked representations:
 
 ```text
 human intention
     ↕
-mumble
+Mumble
     ↕
 WRAP semantic state
     ↕
@@ -41,27 +126,15 @@ code / tools
 observed reality
 ```
 
-Each translation retains provenance so corrections can propagate rather than becoming disconnected documents.
+When information moves between representations, provenance should be retained so that a human edit, code change, tool failure, or execution result can propagate back to the semantic state rather than becoming a disconnected document.
 
 ---
 
-## mumbleWRAP — Semantic State and Compression
+## mumbleWRAP — Semantic State and Primitive Basis
 
 mumbleWRAP is the persistent semantic substrate. The current memory-based expansion of WRAP is **Words Reconstructed As Primitives**; this remains a hypothesis about the original naming.
 
-The important reconstructed invariant is:
-
-```text
-clue → existing primitives → compressed representation
-                         ↓
-                     uncertainty
-                         ↓
-                 new evidence/tests
-                         ↓
-                 new or revised basis
-```
-
-Key properties:
+The reconstructed invariants are:
 
 - reuse existing structures before creating new ones;
 - record how often structures are reused;
@@ -69,9 +142,8 @@ Key properties:
 - support attraction/repulsion and numeric edge weights;
 - preserve provenance between generated views and source nodes;
 - allow provisional primitives and later refactoring;
-- retain uncertainty when the current basis cannot explain evidence.
-
-See [WRAP Core](WRAP_CORE_SPEC.md) and [Semantic Solve](SEMANTIC_SOLVE.md).
+- retain uncertainty when the current basis cannot explain evidence;
+- treat examples as potential tests of semantic hypotheses, not automatically as causes.
 
 ---
 
@@ -88,66 +160,31 @@ DRAG is the retrieval and numerical reasoning layer. The reconstructed design in
 
 Semantic zoom is not assumed to be a simple hide/show threshold. The same graph may compress differently depending on the question, lens, scope, and decoder capability.
 
-See [DRAG Core](DRAG_CORE.md) and `docs/concepts/`.
+The historical DRAG equations are deliberately **not** hard-coded as recovered fact.
 
 ---
 
-## Semantic Compression Is Decoder-Aware
+## Existing-Solution Incorporation
 
-Different AI systems may need different amounts of explicit information to encode or decode the same semantic structure.
-
-A useful reconstruction abstraction is:
+A major application under investigation is using the same semantic basis to compare existing solutions rather than treating retrieved documents as isolated answers:
 
 ```text
-R* = f(semantic structure, decoder capability, lens, task)
+problem
+   ↓
+semantic decomposition
+   ↓
+search existing solutions
+   ↓
+translate candidates into common semantic structure
+   ↓
+compare reusable primitives / contradictions / gaps
+   ↓
+reuse → combine → test
+              │
+              └──→ invent only when existing structure is insufficient
 ```
 
-A candidate primitive can therefore be isolated and given to a decoder to see whether the decoder can reconstruct the clue set that already exists. This tests whether the primitive captures useful predictive structure rather than merely providing a short label.
-
-The current kernel exposes an optional decoder callback and a deterministic lexical baseline. An LLM adapter can be added without changing the semantic data model.
-
----
-
-## Self-Update Loop
-
-```text
-             NEW CLUE
-                 │
-                 ▼
-        TRY EXISTING BASIS
-                 │
-          ┌──────┴──────┐
-          ▼             ▼
-      adequate      inadequate
-          │             │
-          ▼             ▼
-    reuse/strengthen  uncertainty
-                        │
-                ┌───────┼────────┐
-                ▼       ▼        ▼
-              human   agents    tools
-                │       │        │
-                └───────┼────────┘
-                        ▼
-                  test examples
-                        ▼
-                 candidate bases
-                        ▼
-               decoder reconstruction
-                        ▼
-              minimum sufficient basis
-                        │
-                 ┌──────┴──────┐
-                 ▼             ▼
-              extend        refactor
-                 └──────┬──────┘
-                        ▼
-                    persistent
-                    semantic state
-                        ↺
-```
-
-The system is intended to improve its **representation**, not merely accumulate more nodes.
+This allows the system to ask not only **"What exists?"**, but **"Which existing pieces already solve parts of this problem, how can they be combined, and what is genuinely missing?"**
 
 ---
 
@@ -172,10 +209,16 @@ loop = SpecuLoop("knowledge.json")
 loop.ingest("Speed and quality are in tension.")
 result = loop.query("What affects quality?")
 
-# Semantic solve
-solve = loop.learn("Semantic zoom should compress related information.")
+# Contextual semantic solve
+solve = loop.learn(
+    "Semantic zoom should compress related information.",
+    lens="onboarding",
+    task="understand_system",
+    decoder_name="my-model",
+)
 print(solve.compression.coverage)
 print(solve.compression.uncertainty)
+print(solve.evidence_id)
 
 # Optional decoder/LLM adapter
 solve = loop.learn(
@@ -214,7 +257,19 @@ SpecuLoop/
 
 This is an experimental reconstruction of a lost system. Historical facts, strong recollections, and current implementation hypotheses are deliberately separated. The goal is to find the **smallest core that can rebuild the rest**.
 
-See [RECONSTRUCTION_STATUS.md](RECONSTRUCTION_STATUS.md) for the current evidence and implementation status.
+The current implementation now has a concrete experimental center:
+
+1. observe a clue;
+2. score it against the existing basis;
+3. record uncertainty and evidence;
+4. propose a provisional primitive when necessary;
+5. optionally test decoder reconstruction;
+6. compare candidate bases against existing ones;
+7. refactor without deleting provenance.
+
+The original primitive vocabulary, exact WRAP syntax, historical DRAG equations, and remembered backpropagation behavior remain open reconstruction questions.
+
+See [RECONSTRUCTION_STATUS.md](RECONSTRUCTION_STATUS.md) for the evidence and implementation status.
 
 ## License
 
