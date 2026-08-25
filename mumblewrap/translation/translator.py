@@ -1,18 +1,3 @@
-
-"""
-WRAP — Persistent Semantic State Engine for AI Agents
-
-This module implements part of the SpecuLoop semantic graph system.
-WRAP is a graph-based semantic memory representing knowledge as nodes,
-edges, and numeric forces. It supports bidirectional natural language
-translation (Interlocked Translation), Dynamic RAG (DRAG) subgraph
-selection, semantic zoom, lenses, self-extension, provenance tracking,
-and edit feedback propagation.
-
-Core loop: Mumble input -> semantic decomposition -> WRAP graph ->
-DRAG selection -> Mumble Markdown -> human edit -> WRAP update
-"""
-
 """Translator: orchestrates Mumble ↔ WRAP translation.
 
 Ties together Decomposer (text → graph) and Composer (graph → text).
@@ -28,6 +13,13 @@ from ..core.lens import Lens
 from .decomposer import Decomposer, DecompositionResult
 from .composer import Composer, CompositionResult, Provenance
 
+
+
+# SpecuLoop — Persistent Semantic State Engine (WRAP)
+# Semantic graph memory for AI agents: nodes, edges, forces.
+# Supports: DRAG (Dynamic RAG), semantic zoom, interlocked translation,
+# provenance tracking, self-extension, edit feedback propagation.
+# Core: Mumble <-> WRAP graph bidirectional translation.
 
 @dataclass
 class TranslationResult:
