@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+title: "SpecuLoop: Persistent Semantic Memory for AI Agents"
+message: "If you use this software, please cite it as below."
+type: software
+authors:
+  - name: "SpecuLoop Contributors"
+repository-code: "https://github.com/ivanferrier55/SpecuLoop"
+license: MIT
+date-released: "2026-08-25"
+keywords:
+  - semantic-memory
+  - knowledge-graph
+  - persistent-agent-memory
+  - dynamic-rag
+  - semantic-zoom
+  - bidirectional-translation
+  - provenance-tracking
+  - ai-agents
