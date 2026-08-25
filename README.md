@@ -11,7 +11,15 @@ SpecuLoop
 
 ---
 
-## The Problem: Semantic Drift Across Representations
+## The Primary Problem: Semantic Solving
+
+**Semantic solving** is the central problem SpecuLoop is exploring:
+
+> How can an AI solve problems while preserving and evolving the meaning, relationships, context, provenance, uncertainty, and lessons that make its reasoning useful across time and transformations?
+
+This is intentionally broader than AI memory. Memory is one substrate for solving the problem; the objective is meaningful semantic continuity and better problem solving.
+
+The repository currently provides evidence for a narrower and more established observation: **semantic drift across translations**.
 
 A human describes an intention. An AI translates that into a semantic structure. That structure becomes code. The code executes. Reality produces an observation.
 
@@ -28,7 +36,9 @@ human intention
 
 Traditional systems lose the relationship between these representations. Corrections in one layer do not propagate to others.
 
-**The core problem is semantic drift across translations.**
+The broader framing of semantic solving is an **organizing hypothesis**, not an experimentally proven result.
+
+See the full [Problems Map](docs/problems/README.md).
 
 ---
 
