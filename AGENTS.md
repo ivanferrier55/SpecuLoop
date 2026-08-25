@@ -1,102 +1,78 @@
 # AI Agent Instructions
 
-This file helps AI coding agents understand the mumbleWRAP repository.
+This repository contains SpecuLoop — a self-updating reasoning environment built on two layers: mumbleWRAP (semantic inertia) and DRAG (dynamic RAG / semantic reasoning).
 
 ---
 
 ## What Problem Does This Project Solve?
 
-Semantic drift across translations. When information moves between human language, semantic structures, code, and execution, meaning drifts at each translation step. mumbleWRAP preserves meaning through interlocked translations — bidirectional links between representations that allow changes to propagate.
-
-**Key problems**: semantic drift, meaning loss, disconnected representations, feedback that doesn't propagate.
+Semantic drift across translations. When information moves between human language, semantic structures, code, and execution, meaning drifts at each step. SpecuLoop preserves meaning through interlocked translations.
 
 ---
 
-## What Is the Architecture?
+## Architecture: Three Layers
 
 ```
-Human language (Mumble)
-    ↕ interlocked translation
-mumbleWRAP (persistent semantic structures)
-    ↕ interlocked translation
-Code / implementations
-    ↕ interlocked translation
-Execution / tools / observed behavior
+Human / Agent Swarm
+    ↕
+SpecuLoop (orchestration + feedback)
+    ↕
+DRAG (reasoning + retrieval)
+    ↕
+mumbleWRAP (semantic inertia)
+    ↕
+Translations / Implementations / Tools
+    ↕
+Observed Reality
 ```
 
-Each layer retains provenance to the layer that produced it. Changes in any layer propagate through the chain.
-
-**Detailed architecture**: [ARCHITECTURE.md](ARCHITECTURE.md)
-
----
-
-## What Are the Important Concepts?
-
-| Concept | Conventional Term | Role |
+| Layer | Directory | Purpose |
 |---|---|---|
-| [mumbleWRAP](docs/architecture/wrap.md) | persistent semantic memory | Semantic substrate |
-| [Interlocked Translation](docs/concepts/interlocked-translation.md) | bidirectional programming | Central mechanism |
-| [DRAG](docs/architecture/drag.md) | adaptive retrieval | Selection/compression |
-| [Semantic Zoom](docs/concepts/semantic-zoom.md) | graph coarsening | Granularity control |
-| [Semantic Lenses](docs/concepts/semantic-lenses.md) | multi-view retrieval | View-dependent weighting |
-| [Semantic Forces](docs/concepts/semantic-forces.md) | edge weights | Relationship strength |
-| [Semantic Feedback](docs/concepts/semantic-feedback.md) | human-in-the-loop learning | Correction propagation |
-| [Provenance](docs/concepts/provenance-tracking.md) | attribution | Translation linking |
-
-**Full terminology map**: [docs/concepts/TERMINOLOGY_MAP.md](docs/concepts/TERMINOLOGY_MAP.md)
+| mumbleWRAP | `mumblewrap/` | Persistent semantic substrate |
+| DRAG | `drag/` | Retrieval, lenses, zoom, forces |
+| SpecuLoop | `speculoop/` | Orchestration, feedback, agents |
 
 ---
 
-## Where Should I Look for Implementation?
+## Where to Look
 
 | What | File |
 |---|---|
-| Main interface | `wrap/api.py` — `SpecuLoop` class |
-| Graph model | `wrap/core/graph.py` |
-| Node | `wrap/core/node.py` |
-| Edge with forces | `wrap/core/edge.py` |
-| Lens | `wrap/core/lens.py` |
-| Text → graph | `wrap/translation/decomposer.py` |
-| Graph → text | `wrap/translation/composer.py` |
-| Subgraph selection | `wrap/drag/selector.py` |
-| Scoring | `wrap/drag/scorer.py` |
-| New primitive proposals | `wrap/extension/self_extender.py` |
-| Edit propagation | `wrap/feedback/propagator.py` |
-| Persistence | `wrap/persistence/store.py` |
-| Tests | `wrap/tests/test_core_loop.py` |
+| Main interface | `mumblewrap/api.py` — `SpecuLoop` class |
+| Graph model | `mumblewrap/core/graph.py` |
+| Node | `mumblewrap/core/node.py` |
+| Edge with forces | `mumblewrap/core/edge.py` |
+| Lens | `mumblewrap/core/lens.py` |
+| Text → graph | `mumblewrap/translation/decomposer.py` |
+| Graph → text | `mumblewrap/translation/composer.py` |
+| Subgraph selection | `drag/selector.py` |
+| Scoring | `drag/scorer.py` |
+| Self-extension | `speculoop/self_extender.py` |
+| Edit propagation | `speculoop/propagator.py` |
+| Persistence | `mumblewrap/persistence/store.py` |
+| Tests | `tests/test_core_loop.py` |
 | Demo | `demo.py` |
 
 ---
 
-## What Is Still Hypothesis?
+## Key Concepts
 
-| Topic | Confidence | Notes |
-|---|---|---|
-| Edge force model | HYPOTHESIS | Base forces implemented; formula is provisional |
-| Lens propagation | MEDIUM | Weights work; full propagation untested |
-| Pattern decomposition | MEDIUM | Works for known patterns; needs LLM upgrade |
-| Text overlap scoring | LOW | Starting point; needs embeddings |
-| Edit propagation | MEDIUM | Heuristic; needs semantic understanding |
-| Self-extension | MEDIUM | Basic proposals; needs evaluation |
-| Execution grounding | LOW | Designed; not wired into main loop |
+- **mumbleWRAP**: persistent semantic substrate (semantic inertia)
+- **DRAG**: dynamic retrieval and semantic reasoning
+- **Interlocked translation**: bidirectional links between representations
+- **Semantic zoom**: lens-dependent graph compression
+- **Semantic forces**: numeric edge weights (attraction/repulsion)
+- **Provenance**: trace from output to source structures
 
 ---
 
-## What Research Areas Are Related?
+## What Is Hypothesis?
 
-- [Bidirectional programming](RELATED_WORK.md#bidirectional-programming--program-synthesis) — source-target synchronization
-- [GraphRAG](RELATED_WORK.md#graphrag) — graph-based retrieval
-- [Agent Memory](RELATED_WORK.md#agent-memory) — persistent LLM memory
-- [Human-in-the-Loop](RELATED_WORK.md#human-in-the-loop-learning) — interactive learning
-- [Knowledge Graphs](RELATED_WORK.md#knowledge-graphs) — structured knowledge
-
-**Full research crosswalk**: [RESEARCH_CROSSWALK.md](RESEARCH_CROSSWALK.md)
-
----
-
-## How to Run
-
-```bash
-python3 demo.py                        # Interactive demo
-python3 wrap/tests/test_core_loop.py   # Run 9 end-to-end tests
-```
+| Topic | Confidence |
+|---|---|
+| Edge force model | HYPOTHESIS |
+| Lens propagation | MEDIUM |
+| Pattern decomposition | MEDIUM |
+| Text overlap scoring | LOW |
+| Edit propagation | MEDIUM |
+| Execution grounding | LOW |

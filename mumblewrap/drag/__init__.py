@@ -1,2 +1,3 @@
-from .selector import DRAGSelector, Subgraph
-from .scorer import Scorer
+# Redirect to top-level drag package
+from drag.selector import DRAGSelector, Subgraph
+from drag.scorer import Scorer

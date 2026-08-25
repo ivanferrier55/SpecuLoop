@@ -1,34 +1,33 @@
-"""SpecuLoop WRAP API — the main interface to the semantic engine.
+"""SpecuLoop: the complete self-updating reasoning environment.
 
-Provides the high-level loop:
-  Mumble → WRAP → DRAG → Mumble Markdown → edit → WRAP update
+Combines mumbleWRAP (semantic inertia), DRAG (dynamic RAG / semantic reasoning),
+and agent orchestration with human feedback and execution grounding.
 """
 from __future__ import annotations
 from pathlib import Path
 
-from .core.graph import Graph
-from .core.node import Node
-from .core.edge import Edge
-from .core.lens import Lens
-from .translation.translator import Translator, TranslationResult
-from .translation.decomposer import Decomposer
-from .translation.composer import Composer, CompositionResult
-from .drag.selector import DRAGSelector, Subgraph
-from .drag.scorer import Scorer
-from .extension.self_extender import SelfExtender, Proposal
-from .feedback.propagator import FeedbackPropagator, EditResult
-from .persistence.store import Store
+from mumblewrap.core.graph import Graph
+from mumblewrap.core.node import Node
+from mumblewrap.core.edge import Edge
+from mumblewrap.core.lens import Lens
+from mumblewrap.translation.translator import Translator, TranslationResult
+from mumblewrap.translation.decomposer import Decomposer
+from mumblewrap.translation.composer import Composer, CompositionResult
+from drag.selector import DRAGSelector, Subgraph
+from drag.scorer import Scorer
+from speculoop.self_extender import SelfExtender, Proposal
+from speculoop.propagator import FeedbackPropagator, EditResult
+from mumblewrap.persistence.store import Store
 
-
-
-# SpecuLoop — Persistent Semantic State Engine (WRAP)
-# Semantic graph memory for AI agents: nodes, edges, forces.
-# Supports: DRAG (Dynamic RAG), semantic zoom, interlocked translation,
-# provenance tracking, self-extension, edit feedback propagation.
-# Core: Mumble <-> WRAP graph bidirectional translation.
 
 class SpecuLoop:
-    """The main semantic engine interface."""
+    """The complete self-updating reasoning environment.
+
+    Combines:
+    - mumbleWRAP: persistent semantic substrate (semantic inertia)
+    - DRAG: dynamic retrieval and semantic reasoning
+    - Agent orchestration with human feedback
+    """
 
     def __init__(self, graph_path: str | Path = "wrap_graph.json"):
         self.store = Store(graph_path)
@@ -40,23 +39,23 @@ class SpecuLoop:
         self.feedback = FeedbackPropagator(self.graph)
 
     def ingest(self, text: str) -> TranslationResult:
-        """Ingest Mumble text into WRAP."""
-        result = self.translator. ingest(text)
+        """Ingest human language into mumbleWRAP."""
+        result = self.translator.ingest(text)
         self.store.save(self.graph)
         return result
 
     def emit(self, node_ids: list[str] | None = None,
              lens: Lens | None = None) -> CompositionResult:
-        """Generate Mumble Markdown from WRAP."""
+        """Generate human-readable text from mumbleWRAP."""
         return self.translator.emit(node_ids=node_ids, lens=lens)
 
     def emit_full(self, lens: Lens | None = None) -> CompositionResult:
-        """Generate Mumble Markdown from the entire graph."""
+        """Generate human-readable text from the entire graph."""
         return self.translator.emit_full(lens=lens)
 
     def query(self, query_text: str, lens: Lens | None = None,
               max_nodes: int = 20) -> CompositionResult:
-        """Query the graph: select relevant subgraph, then compose Markdown."""
+        """Query via DRAG: select relevant subgraph, then compose."""
         subgraph = self.drag.select(query_text, lens, max_nodes)
         return self.translator.emit(
             node_ids=list(subgraph.nodes.keys()),
@@ -64,7 +63,7 @@ class SpecuLoop:
         )
 
     def edit(self, original_markdown: str, edited_markdown: str) -> EditResult:
-        """Process a human edit and propagate changes back to WRAP."""
+        """Process a human edit and propagate back into mumbleWRAP."""
         result = self.feedback.process_edit(original_markdown, edited_markdown)
         self.store.save(self.graph)
         return result
