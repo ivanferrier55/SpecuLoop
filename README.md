@@ -1,6 +1,6 @@
 # SpecuLoop: Persistent Semantic Memory for AI Agents
 
-**An experimental semantic knowledge graph engine for persistent agent memory, multiscale semantic retrieval, lens-dependent graph reasoning, and bidirectional natural language translation.**
+**An experimental semantic knowledge graph engine implementing lens-dependent semantic zoom over a persistent knowledge graph for token-efficient AI agent memory.**
 
 SpecuLoop implements WRAP (persistent semantic state) — a graph-based architecture where meaning is stored as nodes and edges with numeric forces, viewed through semantic lenses, and translated bidirectionally between natural language and structured representation. The system supports dynamic RAG with semantic zoom, human-in-the-loop feedback propagation, and self-extending knowledge structures.
 
@@ -172,6 +172,8 @@ SpecuLoop's retrieval is dynamic in two senses:
 ---
 
 ## Interlocked Translation
+
+SpecuLoop implements interlocked translation between natural language, semantic graph nodes, code, and executable tools.
 
 Interlocked translation is the bidirectional mapping between natural language and semantic structures:
 
