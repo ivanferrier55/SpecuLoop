@@ -1,28 +1,35 @@
-# Interlocked Translation
+# Interlocked Translation: Preserving Meaning Across Representations
 
-**Search terms**: bidirectional programming, natural language code synchronization, bidirectional natural language representation, program synthesis
+Interlocked translation is the central architectural idea of mumbleWRAP. An interlocked translation is a translation whose output remains linked to the semantic structures from which it was produced.
 
-## What Is Interlocked Translation?
-
-Interlocked translation is the bidirectional mapping between natural language and semantic structures:
+## The Core Property
 
 ```
-Natural language (Mumble)
-    ↕
-Semantic graph (WRAP)
-    ↕
-Materialized views (Markdown)
-    ↕
-Code / tools / execution
+source changes
+    → semantic representation updates
+    → downstream translations can update
+
+downstream observations
+    → semantic structures update
+    → upstream representations can update
 ```
 
-The "interlocked" property means that changes in one representation propagate to the others.
+This bidirectional linking means meaning can survive translation between human language, semantic structures, code, and execution.
+
+## The Translation Chain
+
+mumbleWRAP interlocks four representations:
+
+- **Human language** ↔ mumbleWRAP (decompose / compose with provenance)
+- **mumbleWRAP** ↔ **Code** (semantic structures → implementation)
+- **Code** ↔ **Execution** (implementation → observed behavior)
+- **Execution** ↔ **mumbleWRAP** (feedback → semantic update)
 
 ## How It Works
 
-### WRAP → Mumble (Emission)
+### mumbleWRAP → Human Language (Emission)
 
-The graph generates natural language with provenance metadata:
+The graph generates text with provenance metadata:
 
 ```markdown
 <!-- provenance: nodes=[speed,quality] edges=[opposes] lens=default -->
@@ -30,9 +37,9 @@ Speed opposes quality.
 <!-- /provenance -->
 ```
 
-### Mumble → WRAP (Ingestion)
+### Human Language → mumbleWRAP (Ingestion)
 
-Natural language is decomposed into graph structures:
+Text is decomposed into graph structures:
 
 ```
 "Speed and quality are in tension"
@@ -40,7 +47,7 @@ Natural language is decomposed into graph structures:
 Node[speed] --opposes--> Node[quality]
 ```
 
-### Edited Mumble → WRAP (Feedback)
+### Edited Language → mumbleWRAP (Feedback)
 
 Human edits propagate back:
 
@@ -52,29 +59,28 @@ New nodes: [tooling]
 New edges: tooling --decreases--> (speed-opposes-quality tension)
 ```
 
-## Natural Language ↔ Code
+### Execution → mumbleWRAP (Grounding)
 
-The intended long-term relationship:
+Tool failures and constraints become semantic information:
 
 ```
-English specification
-    ↕ interlocked translation
-Semantic graph (WRAP)
-    ↕ code generation
-Executable code
-    ↕ execution feedback
-Results → semantic update
+intended behavior → mumbleWRAP → code → execution → observation
+    → semantic feedback → mumbleWRAP (updated)
 ```
 
-Changes in the specification propagate to code. Execution failures propagate back to the specification as constraints.
+## Why It Matters
 
-**Implementation status**: Mumble ↔ WRAP translation works. Code translation is planned.
+Without interlocked translation:
+- Generated text cannot be traced to source knowledge
+- Human edits do not update the knowledge base
+- Execution failures disappear as transient errors
+- Specifications and implementations drift apart
 
-## Questions This Project Addresses
-
-- How can generated natural language remain linked to semantic structures?
-- How can human edits propagate back into a knowledge graph?
-- How can specifications, code, and execution results remain synchronized?
+With interlocked translation:
+- Every output has provenance
+- Every correction propagates
+- Every failure becomes knowledge
+- Representations stay mutually consistent
 
 ## Related Technical Concepts
 
@@ -83,3 +89,9 @@ Changes in the specification propagate to code. Execution failures propagate bac
 - program synthesis
 - bidirectional transformations
 - source-target synchronization
+
+**Related problems**: [code-language disconnect](../problems/code-language-disconnect.md), [provenance](provenance-tracking.md)
+
+**Implementation**: `wrap/translation/`, `wrap/feedback/propagator.py`
+
+**Status**: Natural language ↔ mumbleWRAP implemented. Code and execution translation planned.

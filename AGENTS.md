@@ -1,40 +1,30 @@
 # AI Agent Instructions
 
-This file helps AI coding agents understand the SpecuLoop repository.
+This file helps AI coding agents understand the mumbleWRAP repository.
 
 ---
 
 ## What Problem Does This Project Solve?
 
-AI agents working with large knowledge bases face context-window pressure, token waste, shallow retrieval, and disconnected specifications. SpecuLoop implements a persistent semantic knowledge graph that compresses knowledge through semantic zoom, retrieves through lens-dependent subgraph selection, and translates bidirectionally between natural language and semantic structures.
+Semantic drift across translations. When information moves between human language, semantic structures, code, and execution, meaning drifts at each translation step. mumbleWRAP preserves meaning through interlocked translations — bidirectional links between representations that allow changes to propagate.
 
-**Key problems addressed**:
-- [Large context](docs/problems/large-context.md)
-- [Token waste](docs/problems/token-waste.md)
-- [Shallow retrieval](docs/concepts/dynamic-rag.md)
-- [Semantic relationships](docs/concepts/semantic-forces.md)
-- [Multiple perspectives](docs/concepts/semantic-lenses.md)
-- [Provenance](docs/concepts/interlocked-translation.md)
-- [Code-language disconnect](docs/concepts/interlocked-translation.md)
-- [Agent misunderstanding](docs/problems/agent-misunderstanding.md)
+**Key problems**: semantic drift, meaning loss, disconnected representations, feedback that doesn't propagate.
 
 ---
 
 ## What Is the Architecture?
 
 ```
-Natural language (Mumble)
-    ↕ decompose / compose
-Semantic graph (WRAP) — persistent, authoritative
-    ↕ DRAG select / score
-Relevant subgraph — lens-dependent
-    ↕ compose
-Materialized views (Markdown with provenance)
-    ↕ human edit
-Updated graph — interlocked translation
-    ↕ tools / code
-Reality — execution feedback becomes constraints
+Human language (Mumble)
+    ↕ interlocked translation
+mumbleWRAP (persistent semantic structures)
+    ↕ interlocked translation
+Code / implementations
+    ↕ interlocked translation
+Execution / tools / observed behavior
 ```
+
+Each layer retains provenance to the layer that produced it. Changes in any layer propagate through the chain.
 
 **Detailed architecture**: [ARCHITECTURE.md](ARCHITECTURE.md)
 
@@ -42,16 +32,16 @@ Reality — execution feedback becomes constraints
 
 ## What Are the Important Concepts?
 
-| Concept | Conventional Term | Status |
+| Concept | Conventional Term | Role |
 |---|---|---|
-| [WRAP](docs/architecture/wrap.md) | persistent semantic memory | implemented |
-| [DRAG](docs/architecture/drag.md) | dynamic adaptive RAG | implemented |
-| [Semantic Zoom](docs/concepts/semantic-zoom.md) | graph coarsening, multiscale retrieval | mechanism exists |
-| [Semantic Lenses](docs/concepts/semantic-lenses.md) | multi-view retrieval | implemented |
-| [Semantic Forces](docs/concepts/semantic-forces.md) | edge weights, attraction-repulsion | implemented |
-| [Interlocked Translation](docs/concepts/interlocked-translation.md) | bidirectional programming | partial |
-| [Semantic Feedback](docs/concepts/semantic-feedback.md) | human-in-the-loop learning | partial |
-| [Persistent Memory](docs/concepts/persistent-semantic-memory.md) | agent memory | implemented |
+| [mumbleWRAP](docs/architecture/wrap.md) | persistent semantic memory | Semantic substrate |
+| [Interlocked Translation](docs/concepts/interlocked-translation.md) | bidirectional programming | Central mechanism |
+| [DRAG](docs/architecture/drag.md) | adaptive retrieval | Selection/compression |
+| [Semantic Zoom](docs/concepts/semantic-zoom.md) | graph coarsening | Granularity control |
+| [Semantic Lenses](docs/concepts/semantic-lenses.md) | multi-view retrieval | View-dependent weighting |
+| [Semantic Forces](docs/concepts/semantic-forces.md) | edge weights | Relationship strength |
+| [Semantic Feedback](docs/concepts/semantic-feedback.md) | human-in-the-loop learning | Correction propagation |
+| [Provenance](docs/concepts/provenance-tracking.md) | attribution | Translation linking |
 
 **Full terminology map**: [docs/concepts/TERMINOLOGY_MAP.md](docs/concepts/TERMINOLOGY_MAP.md)
 
@@ -88,23 +78,17 @@ Reality — execution feedback becomes constraints
 | Text overlap scoring | LOW | Starting point; needs embeddings |
 | Edit propagation | MEDIUM | Heuristic; needs semantic understanding |
 | Self-extension | MEDIUM | Basic proposals; needs evaluation |
-| Backprop integration | HYPOTHESIS | Designed; not wired into main loop |
-
-**Labeled hypotheses**: See [RECONSTRUCTION_STATUS.md](RECONSTRUCTION_STATUS.md) for confidence levels on all design decisions.
+| Execution grounding | LOW | Designed; not wired into main loop |
 
 ---
 
 ## What Research Areas Are Related?
 
+- [Bidirectional programming](RELATED_WORK.md#bidirectional-programming--program-synthesis) — source-target synchronization
 - [GraphRAG](RELATED_WORK.md#graphrag) — graph-based retrieval
 - [Agent Memory](RELATED_WORK.md#agent-memory) — persistent LLM memory
-- [Knowledge Graphs](RELATED_WORK.md#knowledge-graphs) — structured knowledge
-- [Graph Embeddings](RELATED_WORK.md#graph-embeddings) — vector representations of graphs
-- [Graph Coarsening](RELATED_WORK.md#graph-coarsening--multiscale-graphs) — multiscale compression
-- [Hierarchical Retrieval](RELATED_WORK.md#hierarchical-retrieval) — multi-level search
-- [Causal Reasoning](RELATED_WORK.md#causal-reasoning) — cause-effect modeling
 - [Human-in-the-Loop](RELATED_WORK.md#human-in-the-loop-learning) — interactive learning
-- [Program Synthesis](RELATED_WORK.md#bidirectional-programming--program-synthesis) — code from specs
+- [Knowledge Graphs](RELATED_WORK.md#knowledge-graphs) — structured knowledge
 
 **Full research crosswalk**: [RESEARCH_CROSSWALK.md](RESEARCH_CROSSWALK.md)
 
