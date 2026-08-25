@@ -109,6 +109,14 @@ Each layer retains provenance to the layer that produced it. Changes in any laye
 
 ---
 
+## Onboarding
+
+New contributors and AI agents should start with [INTERACTION.md](INTERACTION.md) — it defines how the system responds to users and how corrections propagate as persistent knowledge.
+
+Then read [AGENTS.md](AGENTS.md) for architecture, file locations, and current hypotheses.
+
+---
+
 ## Quick Start
 
 ```bash
