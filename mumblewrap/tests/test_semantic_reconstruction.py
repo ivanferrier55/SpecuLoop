@@ -26,6 +26,8 @@ def test_uncompressible_clue_generates_provisional_candidate():
         assert result.compression.candidate.kind == "primitive"
         assert result.compression.candidate.metadata["provisional"] is True
         assert result.compression.uncertainty > 0
+        assert result.evidence_id is not None
+        assert any(node.kind == "evidence" for node in loop.graph.nodes.values())
 
 
 def test_candidate_can_be_accepted_and_reused():
@@ -47,9 +49,40 @@ def test_decoder_score_is_separate_from_structural_coverage():
         result = loop.learn(
             "semantic zoom is lens dependent compression",
             decoder=lambda compact: "semantic zoom is lens dependent compression",
+            lens="overview",
+            task="onboarding",
+            decoder_name="test-decoder",
         )
         assert result.compression.decoder_score is not None
         assert result.compression.decoder_score > 0.8
+        assert result.compression.lens == "overview"
+        assert result.compression.task == "onboarding"
+        assert result.compression.decoder == "test-decoder"
+
+
+def test_refactor_proposal_is_non_destructive_until_accepted():
+    with tempfile.TemporaryDirectory() as tmpdir:
+        loop = SpecuLoop(Path(tmpdir) / "graph.json")
+        first = Node(kind="primitive", label="semantic", content="semantic representation")
+        second = Node(kind="primitive", label="compression", content="compress information")
+        loop.graph.add_node(first)
+        loop.graph.add_node(second)
+        loop.learn("semantic compression preserves semantic representation and compresses information")
+
+        candidate = Node(
+            kind="primitive",
+            label="semantic compression",
+            content="semantic compression preserves semantic representation and compresses information",
+        )
+        proposal = loop.propose_refactor([first.id, second.id], candidate)
+        assert proposal is not None
+        assert proposal.improvement > 0
+        assert loop.graph.get_node(candidate.id) is None
+
+        accepted = loop.accept_refactor(proposal, minimum_improvement=0.0)
+        assert loop.graph.get_node(accepted.id) is not None
+        assert loop.graph.get_node(first.id).metadata["superseded_by"] == accepted.id
+        assert loop.graph.get_node(second.id).metadata["superseded_by"] == accepted.id
 
 
 def run_all_tests():
@@ -58,6 +91,7 @@ def run_all_tests():
         test_uncompressible_clue_generates_provisional_candidate,
         test_candidate_can_be_accepted_and_reused,
         test_decoder_score_is_separate_from_structural_coverage,
+        test_refactor_proposal_is_non_destructive_until_accepted,
     ]
     for test in tests:
         test()
