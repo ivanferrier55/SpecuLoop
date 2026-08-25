@@ -1,7 +1,22 @@
-"""Selector: selects a relevant subgraph for a query. EXPLICITLY REPLACEABLE.
 
-Initial implementation: score nodes, propagate through edges, collect top-K.
-Replaceable with: graph neural networks, attention mechanisms, etc.
+"""
+WRAP — Persistent Semantic State Engine for AI Agents
+
+This module implements part of the SpecuLoop semantic graph system.
+WRAP is a graph-based semantic memory representing knowledge as nodes,
+edges, and numeric forces. It supports bidirectional natural language
+translation (Interlocked Translation), Dynamic RAG (DRAG) subgraph
+selection, semantic zoom, lenses, self-extension, provenance tracking,
+and edit feedback propagation.
+
+Core loop: Mumble input -> semantic decomposition -> WRAP graph ->
+DRAG selection -> Mumble Markdown -> human edit -> WRAP update
+"""
+
+"""DRAG Selector — Dynamic graph selection and compression.
+
+DRAG (Dynamic RAG) selects the most relevant subgraph for a query.
+The scoring mechanism is explicitly replaceable.
 """
 from __future__ import annotations
 from dataclasses import dataclass, field

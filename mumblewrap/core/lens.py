@@ -1,3 +1,9 @@
+"""WRAP Lens — Semantic view modifier for the knowledge graph.
+
+Lenses filter and reweight the graph for different tasks. They define
+per-node, per-edge, and per-type weight multipliers that change how
+DRAG scores relevance and how the graph is composed.
+"""
 from __future__ import annotations
 import time
 import uuid
