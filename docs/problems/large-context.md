@@ -26,3 +26,11 @@ Semantic zoom compresses the knowledge graph into a context-appropriate summary.
 A 1000-node graph might compress to 5 nodes under a `high-level` lens, or 50 nodes under a `detailed` lens — without losing the semantic relationships that matter for the query.
 
 **Related**: [Semantic Zoom](../concepts/semantic-zoom.md), [Dynamic RAG](../concepts/dynamic-rag.md)
+
+## Questions This Project Addresses
+
+- [Add natural technical questions that this problem page answers]
+
+- How can an LLM understand a large knowledge base without loading the entire graph into context?
+- How can semantic zoom reduce LLM context requirements?
+- How can graph coarsening preserve semantic relationships while reducing size?

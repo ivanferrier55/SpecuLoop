@@ -15,3 +15,11 @@ Importance is context-dependent, determined by the active semantic lens. A node'
 ```
 relevance(node, query, lens, scope) → numeric score
 ```
+
+## Questions This Project Addresses
+
+- [Add natural technical questions that this problem page answers]
+
+- How can graph importance be query-dependent rather than global?
+- How can generic nodes be distinguished from important nodes?
+- How can different questions produce different importance rankings?

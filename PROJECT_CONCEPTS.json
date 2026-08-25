@@ -1,0 +1,158 @@
+{
+  "version": "0.1.0",
+  "project": "SpecuLoop",
+  "description": "Persistent semantic memory for AI agents — semantic knowledge graph with dynamic RAG, semantic zoom, and interlocked translation",
+  "concepts": [
+    {
+      "name": "wrap",
+      "full_name": "Persistent Semantic State (WRAP)",
+      "aliases": [
+        "persistent semantic memory",
+        "semantic knowledge graph",
+        "structured agent memory",
+        "graph-based reasoning",
+        "knowledge representation"
+      ],
+      "problems": ["context_overload", "shallow_retrieval", "agent_memory"],
+      "related_fields": ["knowledge_graphs", "semantic_memory", "agent_memory"],
+      "status": "implemented",
+      "confidence": "high",
+      "documentation": ["WRAP_CORE_SPEC.md", "docs/architecture/wrap.md"]
+    },
+    {
+      "name": "drag",
+      "full_name": "Dynamic RAG (DRAG)",
+      "aliases": [
+        "adaptive retrieval",
+        "dynamic knowledge graph RAG",
+        "graph-based retrieval",
+        "query-dependent subgraph selection"
+      ],
+      "problems": ["shallow_retrieval", "context_overload", "token_waste"],
+      "related_fields": ["rag", "graphrag", "adaptive_retrieval"],
+      "status": "implemented",
+      "confidence": "medium",
+      "documentation": ["DRAG_CORE.md", "docs/architecture/drag.md"]
+    },
+    {
+      "name": "semantic_zoom",
+      "full_name": "Semantic Zoom",
+      "aliases": [
+        "multiscale semantic retrieval",
+        "semantic graph compression",
+        "hierarchical semantic zoom",
+        "graph coarsening",
+        "context-efficient reasoning"
+      ],
+      "problems": ["context_overload", "token_waste", "knowledge_complexity"],
+      "related_fields": ["graph_coarsening", "hierarchical_retrieval", "multiscale_graphs"],
+      "status": "mechanism_exists",
+      "confidence": "medium",
+      "documentation": ["docs/concepts/semantic-zoom.md"]
+    },
+    {
+      "name": "semantic_lens",
+      "full_name": "Semantic Lens",
+      "aliases": [
+        "multi-view knowledge graph",
+        "context-dependent retrieval",
+        "adaptive retrieval",
+        "view-dependent graph projection"
+      ],
+      "problems": ["one_size_fits_all_retrieval", "multiple_perspectives"],
+      "related_fields": ["multi_view_graphs", "adaptive_retrieval"],
+      "status": "implemented",
+      "confidence": "medium",
+      "documentation": ["docs/concepts/semantic-lenses.md"]
+    },
+    {
+      "name": "semantic_force",
+      "full_name": "Semantic Force",
+      "aliases": [
+        "edge weight",
+        "attraction-repulsion model",
+        "signed graph",
+        "weighted semantic relation"
+      ],
+      "problems": ["semantic_relationships", "graph_ambiguity"],
+      "related_fields": ["signed_graphs", "force_directed_layout"],
+      "status": "implemented",
+      "confidence": "medium",
+      "documentation": ["docs/concepts/semantic-forces.md"]
+    },
+    {
+      "name": "interlocked_translation",
+      "full_name": "Interlocked Translation",
+      "aliases": [
+        "bidirectional programming",
+        "natural language code synchronization",
+        "specification-code alignment",
+        "bidirectional transformation"
+      ],
+      "problems": ["code_language_disconnect", "provenance"],
+      "related_fields": ["bidirectional_programming", "program_synthesis"],
+      "status": "partial",
+      "confidence": "medium",
+      "documentation": ["INTERLOCKED_TRANSLATION.md", "docs/concepts/interlocked-translation.md"]
+    },
+    {
+      "name": "semantic_feedback",
+      "full_name": "Semantic Feedback",
+      "aliases": [
+        "interactive graph learning",
+        "human-in-the-loop knowledge graph",
+        "persistent correction",
+        "semantic belief update"
+      ],
+      "problems": ["agent_misunderstanding", "human_correction"],
+      "related_fields": ["interactive_learning", "active_learning", "rlhf"],
+      "status": "partial",
+      "confidence": "medium",
+      "documentation": ["docs/concepts/semantic-feedback.md"]
+    },
+    {
+      "name": "persistent_semantic_memory",
+      "full_name": "Persistent Semantic Memory",
+      "aliases": [
+        "lifelong agent memory",
+        "AI agent persistent memory",
+        "long-term LLM memory",
+        "persistent knowledge graph"
+      ],
+      "problems": ["agent_memory", "context_overload"],
+      "related_fields": ["agent_memory", "long_term_memory"],
+      "status": "implemented",
+      "confidence": "high",
+      "documentation": ["docs/concepts/persistent-semantic-memory.md"]
+    },
+    {
+      "name": "dynamic_rag",
+      "full_name": "Dynamic RAG",
+      "aliases": [
+        "adaptive retrieval",
+        "incremental graph learning",
+        "lifelong retrieval",
+        "knowledge graph updating"
+      ],
+      "problems": ["shallow_retrieval", "context_overload"],
+      "related_fields": ["adaptive_rag", "incremental_learning"],
+      "status": "partial",
+      "confidence": "medium",
+      "documentation": ["docs/concepts/dynamic-rag.md"]
+    },
+    {
+      "name": "graph_coarsening",
+      "full_name": "Graph Coarsening",
+      "aliases": [
+        "graph summarization",
+        "hierarchical aggregation",
+        "multiscale reduction"
+      ],
+      "problems": ["context_overload", "knowledge_complexity"],
+      "related_fields": ["graph_coarsening", "hierarchical_clustering"],
+      "status": "mechanism_exists",
+      "confidence": "low",
+      "documentation": ["docs/concepts/graph-coarsening.md"]
+    }
+  ]
+}

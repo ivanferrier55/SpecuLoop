@@ -15,3 +15,11 @@ Without explicit relationships, the system cannot distinguish between:
 ## SpecuLoop's Approach
 
 Nodes are explicit, labeled, and connected through typed edges. The same word in different contexts maps to different nodes. Relationships are explicitly typed (`causes`, `opposes`, `supports`), preventing implicit drift.
+
+## Questions This Project Addresses
+
+- [Add natural technical questions that this problem page answers]
+
+- How can a knowledge graph distinguish between different meanings of the same word?
+- How can explicit relationships prevent implicit semantic drift?
+- How can semantic nodes be disambiguated through context?

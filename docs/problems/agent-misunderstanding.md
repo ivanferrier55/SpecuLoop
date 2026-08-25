@@ -17,3 +17,11 @@ Failures and ambiguities are recorded in the graph rather than discarded. This e
 - Clarification questions based on detected ambiguity
 - Learning from human corrections
 - Constraint-aware planning that avoids repeated misunderstandings
+
+## Questions This Project Addresses
+
+- [Add natural technical questions that this problem page answers]
+
+- How can an AI agent know when it does not understand an instruction?
+- How can detected misunderstandings become persistent knowledge?
+- How can clarification questions be generated from decomposition gaps?

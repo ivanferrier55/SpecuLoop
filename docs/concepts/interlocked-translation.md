@@ -69,3 +69,17 @@ Results → semantic update
 Changes in the specification propagate to code. Execution failures propagate back to the specification as constraints.
 
 **Implementation status**: Mumble ↔ WRAP translation works. Code translation is planned.
+
+## Questions This Project Addresses
+
+- How can generated natural language remain linked to semantic structures?
+- How can human edits propagate back into a knowledge graph?
+- How can specifications, code, and execution results remain synchronized?
+
+## Related Technical Concepts
+
+- bidirectional programming
+- natural language code synchronization
+- program synthesis
+- bidirectional transformations
+- source-target synchronization

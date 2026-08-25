@@ -50,3 +50,17 @@ effective_force(edge, lens) = base_force(edge) × lens_weight(edge, lens)
 A `causal` lens might double the weight of `causes` edges while halving `supports` edges.
 
 **Implementation status**: Base forces are implemented in `wrap/core/edge.py`. Lens modification is implemented in scoring. Full force-directed layout is planned.
+
+## Questions This Project Addresses
+
+- How can a knowledge graph represent opposing relationships?
+- How can relationship strength be numeric and context-dependent?
+- How can attraction and repulsion model semantic relationships?
+
+## Related Technical Concepts
+
+- force-directed graph layout
+- signed social networks
+- attraction-repulsion models
+- weighted knowledge graph edges
+- semantic relationship modeling

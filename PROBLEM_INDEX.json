@@ -1,0 +1,137 @@
+{
+  "version": "0.1.0",
+  "problems": [
+    {
+      "id": "context_overload",
+      "name": "Large Knowledge Base Context Overload",
+      "description": "AI agents must read many files to understand a large knowledge base, exceeding context windows and wasting tokens.",
+      "aliases": ["context window problem", "large vault onboarding", "agent onboarding problem"],
+      "conventional_terms": ["long-context reasoning", "agent memory", "hierarchical retrieval", "semantic compression"],
+      "related_concepts": ["semantic_zoom", "persistent_semantic_memory", "drag"],
+      "proposed_solution": "Lens-dependent multiscale graph compression via semantic zoom",
+      "implementation_status": "mechanism_exists",
+      "documentation": ["docs/problems/large-context.md", "docs/concepts/semantic-zoom.md"]
+    },
+    {
+      "id": "token_waste",
+      "name": "Token Waste in Retrieval",
+      "description": "Retrieved documents contain more irrelevant information than relevant, wasting tokens.",
+      "aliases": ["token efficiency", "context waste", "retrieval bloat"],
+      "conventional_terms": ["token-efficient AI agents", "context-efficient reasoning", "retrieval efficiency"],
+      "related_concepts": ["semantic_zoom", "drag"],
+      "proposed_solution": "Subgraph selection with semantic compression",
+      "implementation_status": "partial",
+      "documentation": ["docs/problems/token-waste.md"]
+    },
+    {
+      "id": "shallow_retrieval",
+      "name": "Shallow Retrieval Without Learning",
+      "description": "Traditional RAG retrieves by similarity but does not strengthen relationships or learn from retrieval success.",
+      "aliases": ["stateless RAG", "non-adaptive retrieval", "no feedback retrieval"],
+      "conventional_terms": ["adaptive retrieval", "feedback-driven retrieval", "learning to retrieve"],
+      "related_concepts": ["dynamic_rag", "semantic_feedback"],
+      "proposed_solution": "Dynamic RAG with graph updates from feedback",
+      "implementation_status": "partial",
+      "documentation": ["docs/concepts/dynamic-rag.md"]
+    },
+    {
+      "id": "semantic_relationships",
+      "name": "Semantic Relationships Beyond Similarity",
+      "description": "Vector similarity does not represent causation, opposition, support, or dependency.",
+      "aliases": ["typed relations", "semantic edges", "relational reasoning"],
+      "conventional_terms": ["semantic relationships", "knowledge graph relations", "typed edges", "causal graphs"],
+      "related_concepts": ["semantic_force"],
+      "proposed_solution": "Typed edges with numeric forces, modified by lenses",
+      "implementation_status": "implemented",
+      "documentation": ["docs/concepts/semantic-forces.md"]
+    },
+    {
+      "id": "one_size_fits_all_retrieval",
+      "name": "One-Size-Fits-All Retrieval",
+      "description": "Different questions require different views of the same knowledge, but most systems apply a single ranking strategy.",
+      "aliases": ["static ranking", "no multi-view retrieval"],
+      "conventional_terms": ["multi-view knowledge graph", "context-dependent retrieval", "adaptive retrieval"],
+      "related_concepts": ["semantic_lens", "semantic_zoom"],
+      "proposed_solution": "Semantic lenses that modify graph emphasis per query",
+      "implementation_status": "implemented",
+      "documentation": ["docs/concepts/semantic-lenses.md"]
+    },
+    {
+      "id": "provenance",
+      "name": "AI-Generated Text Without Provenance",
+      "description": "Generated explanations cannot be traced back to specific knowledge structures.",
+      "aliases": ["no attribution", "unverifiable AI output"],
+      "conventional_terms": ["provenance tracking", "interpretable AI reasoning", "source tracing"],
+      "related_concepts": ["interlocked_translation"],
+      "proposed_solution": "Provenance metadata linking output to graph nodes and edges",
+      "implementation_status": "partial",
+      "documentation": ["docs/concepts/interlocked-translation.md"]
+    },
+    {
+      "id": "code_language_disconnect",
+      "name": "Disconnected Specifications and Code",
+      "description": "Natural-language specifications and executable code drift apart.",
+      "aliases": ["spec-code drift", "no bidirectional sync"],
+      "conventional_terms": ["bidirectional programming", "natural language code synchronization", "program synthesis"],
+      "related_concepts": ["interlocked_translation"],
+      "proposed_solution": "Interlocked translation through semantic graph intermediary",
+      "implementation_status": "planned",
+      "documentation": ["docs/concepts/interlocked-translation.md"]
+    },
+    {
+      "id": "agent_misunderstanding",
+      "name": "Agent Misunderstanding",
+      "description": "AI agents may fail to recognize when they have misunderstood an instruction.",
+      "aliases": ["silent misunderstanding", "no clarification"],
+      "conventional_terms": ["agent misunderstanding detection", "human-in-the-loop reasoning", "semantic belief update"],
+      "related_concepts": ["semantic_feedback", "semantic_zoom"],
+      "proposed_solution": "Gap detection and clarification question generation",
+      "implementation_status": "partial",
+      "documentation": ["docs/problems/agent-misunderstanding.md"]
+    },
+    {
+      "id": "tool_failures",
+      "name": "Tool Failures Discarded",
+      "description": "Tool failures are discarded as errors rather than incorporated into persistent reasoning state.",
+      "aliases": ["discarded failures", "no failure learning"],
+      "conventional_terms": ["grounded agent reasoning", "execution feedback", "constraint-aware planning"],
+      "related_concepts": ["semantic_feedback"],
+      "proposed_solution": "Failures recorded as semantic constraints in the graph",
+      "implementation_status": "designed",
+      "documentation": ["docs/problems/constraints.md"]
+    },
+    {
+      "id": "knowledge_complexity",
+      "name": "Knowledge Graph Complexity",
+      "description": "Knowledge graphs become complex and hard to reason over as they grow.",
+      "aliases": ["graph explosion", "too many nodes"],
+      "conventional_terms": ["graph complexity", "scalable knowledge graphs", "graph management"],
+      "related_concepts": ["semantic_zoom", "graph_coarsening"],
+      "proposed_solution": "Lens-dependent graph coarsening via semantic zoom",
+      "implementation_status": "mechanism_exists",
+      "documentation": ["docs/concepts/semantic-zoom.md"]
+    },
+    {
+      "id": "graph_ambiguity",
+      "name": "Knowledge Graph Ambiguity",
+      "description": "Link count is mistaken for importance. Generic nodes dominate rankings.",
+      "aliases": ["centrality problem", "importance ambiguity"],
+      "conventional_terms": ["graph centrality limitations", "knowledge graph importance metrics"],
+      "related_concepts": ["semantic_lens", "semantic_force"],
+      "proposed_solution": "Query-dependent, lens-dependent importance scoring",
+      "implementation_status": "implemented",
+      "documentation": ["docs/problems/knowledge-graph-ambiguity.md"]
+    },
+    {
+      "id": "multiple_perspectives",
+      "name": "Multiple Perspectives on Knowledge",
+      "description": "Different questions require different semantic views over the same knowledge.",
+      "aliases": ["multi-view", "different lenses"],
+      "conventional_terms": ["multi-view knowledge graph", "context-dependent retrieval"],
+      "related_concepts": ["semantic_lens"],
+      "proposed_solution": "Explicit semantic lenses that modify graph emphasis",
+      "implementation_status": "implemented",
+      "documentation": ["docs/concepts/semantic-lenses.md"]
+    }
+  ]
+}

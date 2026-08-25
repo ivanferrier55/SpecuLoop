@@ -33,3 +33,18 @@ The graph grows incrementally — new information is decomposed and merged with 
 | Reasoning | None | Force-based |
 | Compression | Truncation | Semantic zoom |
 | Learning | Append-only | Incremental update |
+
+## Questions This Project Addresses
+
+- How can AI agents maintain persistent knowledge across sessions?
+- How can memory be structured for semantic reasoning, not just storage?
+- How can knowledge grow incrementally without rebuilding?
+
+## Related Technical Concepts
+
+- lifelong agent memory
+- AI agent persistent memory
+- long-term LLM memory
+- persistent knowledge graph
+- memory streams
+- reflective memory

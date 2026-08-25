@@ -13,3 +13,11 @@ Traditional RAG retrieves documents by similarity, but similarity does not equal
 DRAG selects a subgraph, not a set of documents. The subgraph contains only the nodes and edges relevant to the query. Semantic zoom further compresses this subgraph to fit a token budget.
 
 The compression is semantic, not truncation — highly related structures merge rather than being cut off.
+
+## Questions This Project Addresses
+
+- [Add natural technical questions that this problem page answers]
+
+- How can RAG reduce token usage while maintaining retrieval quality?
+- How can semantic compression replace document truncation?
+- How can graph-based retrieval be more token-efficient than vector retrieval?

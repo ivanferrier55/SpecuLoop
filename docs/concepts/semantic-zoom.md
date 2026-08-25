@@ -44,3 +44,20 @@ The coarsening algorithm:
 The compression ratio is controlled by a target token budget.
 
 **Implementation status**: The `compress()` method exists in `wrap/drag/selector.py` but is not yet integrated into the main emit pipeline. Current implementation removes lowest-scored nodes. Full coarsening with cluster merging is planned.
+
+## Questions This Project Addresses
+
+- How can a knowledge graph compress without losing semantic relationships?
+- How can different lenses produce different compressed views?
+- How can compression be query-dependent rather than fixed?
+
+## Related Technical Concepts
+
+- hierarchical knowledge graphs
+- graph coarsening
+- multiscale graphs
+- hierarchical clustering
+- semantic compression
+- context reduction
+- hierarchical retrieval
+- progressive disclosure

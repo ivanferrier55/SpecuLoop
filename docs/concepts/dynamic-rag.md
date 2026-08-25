@@ -47,3 +47,17 @@ Retrieval quality improves as the graph learns from use.
 | Context | Flat | Lens-dependent |
 
 **Implementation status**: Scoring and selection are implemented. Compression and feedback-driven learning are planned.
+
+## Questions This Project Addresses
+
+- How can RAG improve as the knowledge graph grows?
+- How can retrieval quality improve from human feedback?
+- How can the knowledge graph learn from retrieval success and failure?
+
+## Related Technical Concepts
+
+- adaptive retrieval
+- incremental graph learning
+- lifelong retrieval
+- knowledge graph updating
+- online learning for retrieval

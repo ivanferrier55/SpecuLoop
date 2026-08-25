@@ -42,3 +42,18 @@ Each lens specifies:
 When a new lens is introduced, it should propagate through the existing graph — updating edge weights and node relevance based on the lens's emphasis rules.
 
 **Implementation status**: Lenses modify weights during scoring and selection. Dynamic propagation through the full graph is planned.
+
+## Questions This Project Addresses
+
+- How can the same knowledge graph answer structurally different questions?
+- How can retrieval adapt to the type of question being asked?
+- How can different semantic views be applied to the same graph?
+
+## Related Technical Concepts
+
+- multi-view knowledge graphs
+- context-dependent retrieval
+- adaptive retrieval
+- query-dependent ranking
+- multi-head attention
+- topic-aware retrieval

@@ -18,3 +18,11 @@ Interlocked translation maintains bidirectional links between:
 - Execution results
 
 Changes in any layer can propagate to others. The semantic graph serves as the intermediary that connects these representations.
+
+## Questions This Project Addresses
+
+- [Add natural technical questions that this problem page answers]
+
+- How can natural-language specifications remain linked to code?
+- How can changes in specifications propagate to implementations?
+- How can bidirectional synchronization work through a semantic intermediary?
