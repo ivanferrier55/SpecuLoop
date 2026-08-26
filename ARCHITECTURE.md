@@ -1,65 +1,107 @@
 # Architecture
 
-The SpecuLoop system — three layers, one semantic model, shared history.
+The SpecuLoop system — three layers, one semantic model, shared history, and an explicit grounding loop.
 
 ---
 
 ## The Full Translation Chain
 
-```
+```text
 Human / Agent Swarm
     ↕
-SpecuLoop (orchestration + feedback)
+SpecuLoop (objectives + orchestration + feedback)
     ↕
 DRAG (reasoning + retrieval)
     ↕
-mumbleWRAP (semantic inertia)
+mumbleWRAP (semantic basis)
     ↕
-Translations / Implementations / Tools
+Translations / Implementations / Tools / Experiments
     ↕
 Observed Reality
 ```
 
+The important architectural distinction is not human versus AI. It is **generation versus grounding**.
+
+AI systems may generate hypotheses, plans, explanations, and candidate structures at enormous scale. Those generations should not automatically acquire the same semantic authority as observations, constraints, experiments, or other evidence.
+
 ### Information Flows
 
-**Downstream** (intention → reality):
+**Downstream** (objective → action):
 
-```
-human intention
+```text
+objective / question
     → SpecuLoop receives and orchestrates
     → DRAG selects and compresses relevant structures
     → mumbleWRAP provides semantic substrate
     → Translation layer produces code/implementation
-    → Tools execute
+    → Tools / experiments execute
     → Reality produces observation
 ```
 
-**Upstream** (reality → understanding):
+**Upstream** (evidence → understanding):
 
+```text
+observed behavior / experiment / external evidence
+    → grounding signal reaches SpecuLoop
+    → evidence and constraints recorded in mumbleWRAP
+    → DRAG updates retrieval/reasoning state
+    → semantic basis is evaluated
+    → human or autonomous system receives updated understanding
 ```
-observed behavior
-    → Execution feedback reaches SpecuLoop
-    → Constraints recorded in mumbleWRAP
-    → DRAG updates retrieval weights
-    → Human receives updated understanding
+
+### Grounding Loop
+
+```text
+                 OBJECTIVE / QUESTION
+                         │
+                         ▼
+                  SEMANTIC BASIS
+                         │
+                         ▼
+                    AI GENERATION
+                         │
+                   hypotheses
+                         │
+                         ▼
+                    TEST / EXECUTE
+                         │
+                         ▼
+                 OBSERVATION / EVIDENCE
+                         │
+                         ▼
+                  BASIS EVALUATION
+                    ┌────┴────┐
+                    ▼         ▼
+                 adequate  inadequate
+                    │         │
+                    ▼         ▼
+              retain/update  investigate
+                              │
+                              ▼
+                        basis refactor
+                              │
+                              └──────→ next cycle
 ```
+
+The system is intended to let generation run quickly while making **evidence, rather than generation volume, the source of semantic authority**.
 
 ---
 
-## Layer: mumbleWRAP (Semantic Inertia)
+## Layer: mumbleWRAP (Semantic Basis)
 
-The persistent semantic substrate. Increases semantic inertia by preserving, connecting, and accumulating meaning.
+The persistent semantic substrate. It maintains the current semantic basis and its history rather than serving as an undifferentiated store of generated information.
 
 **Responsibilities**:
 
-- Track incoming semantic inputs
+- Track incoming semantic inputs and evidence
 - Decompose new inputs into existing structures
 - Record reuse of existing nodes
 - Create translation relationships
 - Preserve provenance
 - Identify confusion and contradictions
-- Strengthen structures that repeatedly explain inputs
-- Allow new primitives when needed
+- Strengthen structures that repeatedly explain grounded inputs
+- Allow provisional primitives when needed
+- Support later semantic refactoring
 
 **Contains**:
 
@@ -70,6 +112,12 @@ The persistent semantic substrate. Increases semantic inertia by preserving, con
 - `primitives/` — (planned) primitive management
 
 **Does NOT contain**: retrieval, visualization, agent orchestration
+
+### Semantic inertia
+
+The repository's original architectural notes used “semantic inertia” to describe accumulation. The current research direction treats inertia as a **problem to manage**: generated representations can become disproportionately influential merely because they accumulate or are repeatedly retrieved.
+
+The semantic basis is intended to reduce this effect by distinguishing provisional generated candidates from evidence-supported structures.
 
 ---
 
@@ -84,6 +132,7 @@ The retrieval and reasoning layer. Dynamically retrieves, compresses, and reason
 - Semantic lenses (different views over the same graph)
 - Numerical force calculations
 - Graph-based visual and mathematical reasoning
+- Preserve the provenance and status of retrieved structures
 
 **Contains**:
 
@@ -102,7 +151,7 @@ The retrieval and reasoning layer. Dynamically retrieves, compresses, and reason
 
 ## Layer: SpecuLoop (Complete Reasoning Environment)
 
-The operational layer. Combines mumbleWRAP, DRAG, agents, and humans into a continuous reasoning system.
+The operational layer. Combines mumbleWRAP, DRAG, agents, tools, experiments, and humans into a continuous reasoning system.
 
 **Responsibilities**:
 
@@ -110,6 +159,7 @@ The operational layer. Combines mumbleWRAP, DRAG, agents, and humans into a cont
 - Human feedback propagation
 - Self-extension (new primitive proposals)
 - Execution grounding (failures → constraints)
+- Experiment/tool feedback
 - Persistent system state
 
 **Contains**:
@@ -126,13 +176,30 @@ The operational layer. Combines mumbleWRAP, DRAG, agents, and humans into a cont
 
 ## Cross-Cutting Concerns
 
+### Grounding
+
+Grounding signals may come from humans or from the world. Relevant sources can include:
+
+- objectives and constraints;
+- observations;
+- experiments and measurements;
+- execution results;
+- external evidence;
+- validated simulations.
+
+Generated hypotheses are candidates for grounding rather than automatic replacements for it.
+
+See [GROUNDING.md](GROUNDING.md).
+
 ### Provenance
 
-Provenance links generated output to the specific mumbleWRAP structures that produced it. It flows through all layers:
+Provenance links generated output to the specific mumbleWRAP structures and evidence that produced or supported it. It flows through all layers:
 
 - mumbleWRAP stores provenance metadata
 - DRAG preserves provenance during selection
 - SpecuLoop uses provenance for feedback propagation
+
+A future epistemic layer may additionally distinguish source type and evidential status; this remains an open research question.
 
 ### Lenses
 
@@ -150,9 +217,11 @@ The graph persists as JSON. All layers read from and write to the same persisten
 
 ## Design Principles
 
-1. **Meaning preservation** is the primary optimization target
-2. **Interlocked translation** is the central mechanism
-3. **mumbleWRAP** is the semantic substrate, not the objective
-4. **Every component is replaceable**
-5. **One repository** until components are independently useful
-6. **Shared history** and experiments across all layers
+1. **Grounding constrains semantic authority**
+2. **Meaning preservation** is the primary optimization target
+3. **Interlocked translation** is the central mechanism
+4. **mumbleWRAP** is the semantic substrate, not the objective
+5. **Generation is exploratory; evidence can change the basis**
+6. **Every component is replaceable**
+7. **One repository** until components are independently useful
+8. **Shared history** and experiments across all layers
