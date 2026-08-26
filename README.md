@@ -1,6 +1,12 @@
-# SpecuLoop
+# SpecuLoop — Semantic Memory & Reasoning for AI Agents
 
-**A semantic reasoning system that tests and refactors its own representation.**
+**An experimental semantic memory and reasoning system that tests, compresses, and refactors its knowledge representation.**
+
+SpecuLoop explores a different approach to AI-agent memory: instead of treating memory as a collection of documents to retrieve, it represents knowledge as reusable semantic structures and tests whether those structures can reconstruct new information. When the current representation is inadequate, the system can propose new semantic primitives and investigate whether the semantic basis should change.
+
+> **Core idea:** memory is not only something an AI retrieves. The representation used for memory can itself be tested and improved.
+
+### At a glance
 
 ```text
 SpecuLoop
@@ -8,6 +14,33 @@ SpecuLoop
     ├── DRAG: lens-dependent retrieval, forces, and semantic zoom
     └── SpecuLoop: agents, tests, tools, feedback, and reality constraints
 ```
+
+### Explore
+
+- [Quick Start](#quick-start)
+- [Core Research Question](#the-core-research-question)
+- [Semantic Compression](#why-semantic-compression)
+- [Evidence and Self-Refactoring](#evidence-and-self-refactoring)
+- [Architecture](ARCHITECTURE.md)
+- [Semantic Solve](SEMANTIC_SOLVE.md)
+- [Reconstruction Status](RECONSTRUCTION_STATUS.md)
+- [Glossary](GLOSSARY.md)
+
+---
+
+## What Makes SpecuLoop Different?
+
+Many AI memory systems focus primarily on storing information and retrieving relevant context. SpecuLoop investigates what happens when the **semantic representation itself becomes an object of experimentation**.
+
+```text
+Conventional memory
+    store → retrieve
+
+SpecuLoop
+    represent → test → compress → reconstruct → extend / refactor
+```
+
+The current reconstruction records primitive reuse, unresolved evidence, uncertainty, provenance, and the tests that support changes to the semantic basis. This is an experimental direction, not a claim that the system is already a fully autonomous self-improving memory system.
 
 ---
 
@@ -234,6 +267,7 @@ solve = loop.learn(
 ```text
 SpecuLoop/
 ├── README.md
+├── GLOSSARY.md
 ├── ARCHITECTURE.md
 ├── RECONSTRUCTION_STATUS.md
 ├── SEMANTIC_SOLVE.md
