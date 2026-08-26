@@ -1,22 +1,24 @@
-# SpecuLoop — Semantic Memory & Reasoning for AI Agents
+# SpecuLoop — Grounded Semantic Reasoning for AI Agents
 
-**An experimental semantic memory and reasoning system that tests, compresses, and refactors its knowledge representation.**
+**An experimental semantic system for letting AI generate, test, and refine knowledge without letting generated volume become semantic authority.**
 
-SpecuLoop explores a different approach to AI-agent memory: instead of treating memory as a collection of documents to retrieve, it represents knowledge as reusable semantic structures and tests whether those structures can reconstruct new information. When the current representation is inadequate, the system can propose new semantic primitives and investigate whether the semantic basis should change.
+SpecuLoop explores a different approach to AI memory and reasoning: instead of treating memory as an undifferentiated collection of information, it represents knowledge as reusable semantic structures and tests whether those structures remain useful against new evidence.
 
-> **Core idea:** memory is not only something an AI retrieves. The representation used for memory can itself be tested and improved.
+> **Core idea:** AI can generate knowledge faster than it can be grounded. Generation explores; grounding constrains; the semantic basis records what currently survives.
 
 ### At a glance
 
 ```text
 SpecuLoop
+    ├── Grounding: objectives, observations, experiments, tools, evidence
     ├── mumbleWRAP: persistent semantic state / primitive basis
     ├── DRAG: lens-dependent retrieval, forces, and semantic zoom
-    └── SpecuLoop: agents, tests, tools, feedback, and reality constraints
+    └── SpecuLoop: agents, tests, tools, feedback, and execution
 ```
 
 ### Explore
 
+- [Grounded Semantic Reasoning](GROUNDING.md)
 - [Quick Start](#quick-start)
 - [Core Research Question](#the-core-research-question)
 - [Semantic Compression](#why-semantic-compression)
@@ -30,71 +32,74 @@ SpecuLoop
 
 ## What Makes SpecuLoop Different?
 
-Many AI memory systems focus primarily on storing information and retrieving relevant context. SpecuLoop investigates what happens when the **semantic representation itself becomes an object of experimentation**.
+Many AI systems can generate enormous amounts of information. SpecuLoop investigates what happens when generated information must remain distinguishable from the evidence that grounds the system's semantic representation.
 
 ```text
-Conventional memory
-    store → retrieve
+Generation
+    propose → explain → plan → hypothesize
 
-SpecuLoop
-    represent → test → compress → reconstruct → extend / refactor
+Grounding
+    observe → test → measure → execute → constrain
+
+Semantic basis
+    represent → reconstruct → evaluate → refactor
 ```
 
-The current reconstruction records primitive reuse, unresolved evidence, uncertainty, provenance, and the tests that support changes to the semantic basis. This is an experimental direction, not a claim that the system is already a fully autonomous self-improving memory system.
+The goal is not to slow AI generation or make humans approve every generation. A fully autonomous research system is compatible with this architecture: the AI can generate hypotheses and design experiments while the experiment provides the grounding signal.
+
+The current reconstruction records primitive reuse, unresolved evidence, uncertainty, provenance, and the tests that support changes to the semantic basis. This is an experimental direction, not a claim that the system is already a fully autonomous grounded reasoning system.
 
 ---
 
 ## The Core Research Question
 
-> **Can an AI preserve and improve meaning by compressing observations into reusable semantic primitives, testing those primitives against new evidence, and refactoring the semantic basis when a better explanation emerges?**
+> **Can an AI generate and accumulate knowledge at machine speed while keeping its semantic representation grounded in objectives, observations, experiments, and other evidence?**
 
-The current reconstruction treats every incoming statement as a **clue**. The system first tries to express the clue using existing primitives. If that representation is inadequate, the mismatch becomes uncertainty that can drive human questions, agent-generated examples, tool execution, decoder tests, and candidate primitive discovery.
+A related hypothesis is that **semantic inertia** emerges when generated information becomes recursively influential simply because it has accumulated or is easy to retrieve. Separating candidate generation from evidence-based basis updates may reduce this effect.
 
-This is intentionally broader than AI memory. Memory is the persistent substrate; the objective is a semantic model that can improve its own ability to represent, retrieve, test, and translate information.
+The current reconstruction treats incoming information as a clue and attempts to express it using existing primitives. If that representation is inadequate, the mismatch becomes uncertainty that can drive human questions, agent-generated hypotheses, tool execution, decoder tests, experiments, and candidate primitive discovery.
+
+This is broader than AI memory. Memory is the persistent substrate; the research target is a grounded semantic representation that can improve its ability to represent, retrieve, test, and translate information.
 
 ---
 
 ## The Core Loop
 
 ```text
-                    NEW CLUE
-                        │
-                        ▼
-                EXISTING BASIS
-                        │
-                ┌───────┴───────┐
-                ▼               ▼
-             adequate       inadequate
-                │               │
-                ▼               ▼
-         reuse / strengthen  uncertainty
-                                │
-                 ┌──────────────┼──────────────┐
-                 ▼              ▼              ▼
-              human          agents          tools
-                 │              │              │
-                 └──────────────┼──────────────┘
-                                ▼
-                         hypotheses / tests
-                                ▼
-                     candidate semantic bases
-                                ▼
-                    decoder reconstruction
-                                ▼
-                     minimum sufficient basis
-                                │
-                       ┌────────┴────────┐
-                       ▼                 ▼
-                    extend            refactor
-                       └────────┬────────┘
-                                ▼
-                       persistent WRAP state
-                                ↺
+                 OBJECTIVE / QUESTION
+                         │
+                         ▼
+                  SEMANTIC BASIS
+                         │
+                         ▼
+                    AI GENERATION
+                         │
+              hypotheses / plans / candidates
+                         │
+                         ▼
+                    TEST / EXECUTE
+                         │
+                         ▼
+                 OBSERVATION / EVIDENCE
+                         │
+                         ▼
+                  BASIS EVALUATION
+                    ┌────┴────┐
+                    ▼         ▼
+                 adequate  inadequate
+                    │         │
+                    ▼         ▼
+              retain/update  investigate
+                              │
+                              ▼
+                        basis refactor
+                              │
+                              └──────→ next cycle
 ```
 
-The system is intended to improve its **representation**, not merely accumulate more nodes.
+The system is intended to improve its **representation without allowing generation volume to become semantic authority**.
 
-See [Semantic Solve](SEMANTIC_SOLVE.md).
+See [Grounded Semantic Reasoning](GROUNDING.md) and [Semantic Solve](SEMANTIC_SOLVE.md).
 
 ---
 
@@ -148,13 +153,13 @@ That makes primitive discovery closer to an experimental/scientific loop than to
 The broader system is designed around interlocked representations:
 
 ```text
-human intention
+objective / human intention
     ↕
 Mumble
     ↕
 WRAP semantic state
     ↕
-code / tools
+code / tools / experiments
     ↕
 observed reality
 ```
@@ -267,6 +272,7 @@ solve = loop.learn(
 ```text
 SpecuLoop/
 ├── README.md
+├── GROUNDING.md
 ├── GLOSSARY.md
 ├── ARCHITECTURE.md
 ├── RECONSTRUCTION_STATUS.md
