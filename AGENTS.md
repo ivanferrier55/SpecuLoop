@@ -1,72 +1,37 @@
-# AI Agent Instructions
+# SpecuLoop
 
-This repository contains SpecuLoop — a self-updating reasoning environment built on two layers: mumbleWRAP (semantic inertia) and DRAG (dynamic RAG / semantic reasoning).
+A semantic reasoning environment that preserves meaning across translations. Three layers: mumbleWRAP (semantic substrate), DRAG (retrieval + reasoning), SpecuLoop (orchestration + feedback).
 
----
+## Where am I?
 
-## What Problem Does This Project Solve?
+This is the repo root. The map lives in `map/`.
 
-Semantic drift across translations. When information moves between human language, semantic structures, code, and execution, meaning drifts at each step. SpecuLoop preserves meaning through interlocked translations.
+## What do I do?
 
----
+Read `map/CLAUDE.md` to orient. It routes to object cards and process cards.
 
-## Architecture: Three Layers
+## Quick routes
 
-```
-Human / Agent Swarm
-    ↕
-SpecuLoop (orchestration + feedback)
-    ↕
-DRAG (reasoning + retrieval)
-    ↕
-mumbleWRAP (semantic inertia)
-    ↕
-Translations / Implementations / Tools
-    ↕
-Observed Reality
-```
-
-| Layer | Directory | Purpose |
-|---|---|---|
-| mumbleWRAP | `mumblewrap/` | Persistent semantic substrate |
-| DRAG | `drag/` | Retrieval, lenses, zoom, forces |
-| SpecuLoop | `speculoop/` | Orchestration, feedback, agents |
-
----
-
-## Where to Look
-
-| What | File |
+| I need to... | Go to |
 |---|---|
-| Main interface | `mumblewrap/api.py` — `SpecuLoop` class |
-| Graph model | `mumblewrap/core/graph.py` |
-| Node | `mumblewrap/core/node.py` |
-| Edge with forces | `mumblewrap/core/edge.py` |
-| Lens | `mumblewrap/core/lens.py` |
-| Text → graph | `mumblewrap/translation/decomposer.py` |
-| Graph → text | `mumblewrap/translation/composer.py` |
-| Subgraph selection | `drag/selector.py` |
-| Scoring | `drag/scorer.py` |
-| Self-extension | `speculoop/self_extender.py` |
-| Edit propagation | `speculoop/propagator.py` |
-| Persistence | `mumblewrap/persistence/store.py` |
-| Tests | `tests/test_core_loop.py` |
-| Demo | `demo.py` |
+| Understand the codebase | `map/CLAUDE.md` → object cards in `map/objects/` |
+| Change a module | `map/objects/<name>.md` for the file path |
+| Change behavior | `map/processes/<name>.md` for the entrypoint |
+| Know what breaks | `map/effects/CONTEXT.md` — what moves if you change X |
+| Run the demo | `python3 demo.py` |
+| Run tests | `python3 tests/test_core_loop.py` |
+| See the architecture | `ARCHITECTURE.md` |
+| Read research context | `GROUNDING.md`, `SEMANTIC_SOLVE.md` |
 
----
+## Key code paths
 
-## Key Concepts
+| Layer | Directory | Entry |
+|---|---|---|
+| mumbleWRAP | `mumblewrap/` | `mumblewrap/api.py` — `SpecuLoop` class |
+| DRAG | `drag/` | `drag/selector.py`, `drag/scorer.py` |
+| SpecuLoop | `speculoop/` | `speculoop/self_extender.py`, `speculoop/propagator.py` |
 
-- **mumbleWRAP**: persistent semantic substrate (semantic inertia)
-- **DRAG**: dynamic retrieval and semantic reasoning
-- **Interlocked translation**: bidirectional links between representations
-- **Semantic zoom**: lens-dependent graph compression
-- **Semantic forces**: numeric edge weights (attraction/repulsion)
-- **Provenance**: trace from output to source structures
-
----
-
-## What Is Hypothesis?
+## Hypotheses
 
 | Topic | Confidence |
 |---|---|

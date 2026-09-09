@@ -1,0 +1,4 @@
+interface:
+  display_name: "SpecuLoop Memory"
+  short_description: "Grounded semantic memory for agents"
+  default_prompt: "Use $speculoop to record this as grounded semantic memory and query it back."

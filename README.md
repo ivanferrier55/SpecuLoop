@@ -293,6 +293,19 @@ SpecuLoop/
 
 ---
 
+## Agent Skill
+
+[`skills/speculoop/`](skills/speculoop/) is an installable Codex skill that turns SpecuLoop into persistent, grounded semantic memory for an agent. The agent decomposes observations into subject-relation-object triples, stores them with provenance and evidence status, queries them back through DRAG, and updates status as claims get grounded.
+
+```bash
+# install (once, pointing at this repo)
+python3 skills/speculoop/scripts/speculoop.py install --root .
+
+# use
+python3 skills/speculoop/scripts/speculoop.py know "Experiments" supports "Evidence" --status observed --source "GROUNDING.md"
+python3 skills/speculoop/scripts/speculoop.py query "What decreases Semantic inertia?"
+```
+
 ## Status
 
 This is an experimental reconstruction of a lost system. Historical facts, strong recollections, and current implementation hypotheses are deliberately separated. The goal is to find the **smallest core that can rebuild the rest**.

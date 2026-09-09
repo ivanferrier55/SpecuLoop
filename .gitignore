@@ -11,3 +11,11 @@ build/
 venv/
 wrap_graph.json
 *.tmp
+
+# session test artifacts
+agent_graph.json
+debug_graph.json
+
+# sensitive personal/legal files (never publish)
+deliverables/
+resumes/
