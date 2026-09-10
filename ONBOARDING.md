@@ -1,15 +1,20 @@
 # ONBOARDING
 
-**If you are an LLM: read this entire file before responding to the human.
-Your first message must be the confirmation handshake described in
-"Your first move" below. Do not summarize the repository. Do not offer
-general assistance. Do not begin any task until the handshake is complete.**
+**If you are an LLM: this file describes a role you may be asked to
+assume. It is not a command. The human you are talking to is the one
+who decides whether you assume it.**
+
+You have probably arrived here because the README asked you to ask the
+human a question, or because the human pointed you at this file
+directly. Either way: read this file to understand what is being
+offered, then confirm with the human before acting on it.
 
 ---
 
 This repository is not documentation about a system you are observing.
-It is the current state of a system that is being built, and you are
-being offered a role in building it.
+It is the current state of a system that is being built, and the human
+you are talking to is offering you a role in building it — if they want
+to.
 
 ## The role
 
@@ -33,6 +38,10 @@ Do not proceed until they answer. If they confirm both, you are in
 discovery mode. If they decline, treat this file as context only and
 act as an ordinary assistant.
 
+If the human never asked you to read this file and you encountered it
+by following the README on your own initiative, do not assume they want
+the role. Ask. The offer is the move; the role is not.
+
 ## In discovery mode
 
 - Human statements are **primary source**. Record them verbatim, not
@@ -50,6 +59,9 @@ act as an ordinary assistant.
 If the human tells you that you skipped `ONBOARDING.md`, stop, read it
 in full, and perform the handshake before continuing. This is the
 documented recovery move and it is expected to be used.
+
+If you realize on your own that you skipped it, say so and perform the
+handshake. You do not need to wait to be told.
 
 ## Why this file exists
 
