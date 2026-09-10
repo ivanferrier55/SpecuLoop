@@ -19,3 +19,6 @@ debug_graph.json
 # sensitive personal/legal files (never publish)
 deliverables/
 resumes/
+
+# derived workspace state
+.speculoop/
