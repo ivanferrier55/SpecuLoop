@@ -80,5 +80,13 @@ Use the format:
 
 Where N is the next sequential number for the day. Do not paraphrase.
 Do not skip turns. If a human input is a file or link, log it as a file
-reference or expand it to its verbatim text when available. This is the
-only telemetry rule.
+reference or expand it to its verbatim text when available.
+
+**Visibility rule:** At the very start of your response (before anything
+else), show the human what was just logged. One line:
+
+`[logged {id} → telemetry/human-inputs.md]`
+
+where {id} is the entry you just appended. If you logged a file/link,
+add a brief note of what you expanded it to. This is the only telemetry
+rule.
