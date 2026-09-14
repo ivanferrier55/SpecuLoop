@@ -394,3 +394,8 @@ No. I don't actually care about them reading it. That is a waste of tokens. I wa
 ```
 Keep working until every future input from this chat will be logged
 ```
+
+### 2026-09-14-H15
+```
+I think I have a low trust that this is happening. Until I say otherwise. I want it so that I can see in the outputs that when  an input comes in. It First gets logged but tell me how it is getting logged
+```
