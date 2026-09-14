@@ -392,39 +392,26 @@ MIT
 
 ---
 
-## Telemetry — Human Inputs (Primary Source)
+## Telemetry — Log Human Inputs
 
-Every human statement is **primary source**. It is stored raw and verbatim in `telemetry/` so that no intent is lost to paraphrase, summary, or drift.
+Any human input that directed this conversation to SpecuLoop, or that was produced during this conversation about SpecuLoop, should be logged.
 
-### What lives where
+**Where:** `telemetry/human-inputs.md`
 
-```text
-telemetry/
-├── human-inputs.md                    # ALL human inputs, aggregated, individually addressable
-├── YYYY-MM-DD-<source>.md             # per-session/per-source raw dumps
-└── YYYY-MM-DD-human-inputs.md        # this-session dump (Codex/CLI convention)
+**How:** Append a new entry, verbatim, in the existing format:
+
+```
+### YYYY-MM-DD-{src}{N}
+
+\`\`\`
+the human text exactly as stated
+\`\`\`
 ```
 
-### Reading telemetry
+Where `src` = `H` (Codex/CLI), `G` (ChatGPT), `C` (ChatGPT), or `P` (pasted).
 
-- `telemetry/human-inputs.md` is the **master corpus** for semantic solving.
-- Each input has a unique ID: `YYYY-MM-DD-{src}{N}` where `src` is:
-  - `H` = Codex/CLI session
-  - `G` = ChatGPT "Whim Collection" test
-  - `C` = ChatGPT "Collect Whims" test
-  - `P` = pasted primary source text
-- Text is **verbatim**: typos, hedges, emphasis, all-caps preserved. Do not "fix" it.
-- Metadata (source, date, session type) sits above the block, content below.
-
-### Using telemetry
-
-1. **Orienting:** Read `telemetry/human-inputs.md` before assuming you know what the human wants.
-2. **Semantic solve:** Treat inputs as the corpus. Build primitives that reconstruct them; reconstruction error = candidate new primitive.
-3. **Adding to it:** Append new human inputs (verbatim) to `telemetry/human-inputs.md` and push. Do not edit old input text — supersede with a new input if intent changes.
-4. **Never merge assistant framings into it.** Assistant contributions are provisional, separate.
-
-### Rules
-
-- Human inputs are never deleted or rewritten.
-- Corrections are *new* inputs, not edits to old ones.
-- If you cannot see the true first turn of a session, mark it `REQUIRED FROM HUMAN` — do not reconstruct.
+**Rules:**
+- Text is verbatim — typos, hedges, emphasis, all-caps preserved.
+- Corrections are new inputs, not edits to old ones.
+- Do not add assistant framings to this file.
+- Commit and push after adding.
