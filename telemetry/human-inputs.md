@@ -7,7 +7,7 @@ All text preserved exactly as stated — typos, emphasis, hedges intact.
 ---
 
 ## Source: Session 2026-09-11, mumbleWRAP origin recovery
-Location: `sessions/2026-09-11-mumblewrap-origin.md`
+Location: `telemetry/2026-09-11-mumblewrap-origin.md`
 
 ### 2026-09-11-H1
 ```
@@ -319,7 +319,7 @@ Before that I was trying to make 2 apps (1 about language learning that was very
 
 | Source | Input count | Date | Session type |
 |---|---|---|---|
-| sessions/2026-09-11 | 7 | 2026-09-11 | discovery |
+| telemetry/2026-09-11 | 7 | 2026-09-11 | discovery |
 | Codex CLI 2026-09-14 | 10 | 2026-09-14 | build |
 | ChatGPT "Whim Collection" | 5 | 2026-09-14 | test |
 | ChatGPT "Collect Whims" | 2 | 2026-09-14 | test |
@@ -335,3 +335,38 @@ Before that I was trying to make 2 apps (1 about language learning that was very
 - Sources may overlap (pasted text contains inputs from multiple prior sessions)
 - The "dream reconstruction" inputs (P1-P17) span multiple prior attempts and contain both human intent and historical context
 - Inputs G3, G5, C2, H5, H9 are frustration/urgency signals — high information content about pain points
+
+### 2026-09-14-H11
+```
+I think that session file is a prior attempt at  telemetry (as is clear by the H- meaning human) please migrate it to your system
+```
+
+### 2026-09-14-H12
+```
+It feels like you are saying that telemetry is being captured. As a test where can I find the last input from this chat in the telemetry? "I think that session file is a prior attempt at  telemetry (as is clear by the H- meaning human) please migrate it to your system" Also where will I find this input?
+
+If these don't have answers, we don't have working telemetry.
+```
+
+### 2026-09-14-H13
+```
+Do we need to write a skill or can I just prompt every bot  to append inputs after each run?
+```
+
+### 2026-09-14-H14
+```
+Yes. And then make sure all inputs including this on and the last one and future ones will get logged
+```
+
+---
+
+## Source metadata (updated)
+
+| Source | Input count | Date | Session type |
+|---|---|---|---|
+| telemetry/2026-09-11 | 7 | 2026-09-11 | discovery |
+| Codex CLI 2026-09-14 | 14 | 2026-09-14 | build |
+| ChatGPT "Whim Collection" | 5 | 2026-09-14 | test |
+| ChatGPT "Collect Whims" | 2 | 2026-09-14 | test |
+| Pasted text (dream recon) | 17 | 2026-09-14 | primary source |
+| **Total** | **45** | | |

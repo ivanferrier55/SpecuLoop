@@ -59,3 +59,18 @@ Read `map/CLAUDE.md` to orient. It routes to object cards and process cards.
 | Text overlap scoring | LOW |
 | Edit propagation | MEDIUM |
 | Execution grounding | LOW |
+
+## Telemetry
+
+After every human turn, append their input verbatim to
+`telemetry/human-inputs.md`. Use the format:
+
+```
+### YYYY-MM-DD-H{N}
+```
+{verbatim human input}
+```
+```
+
+Where N is the next sequential number for the day. Do not paraphrase.
+Do not skip turns. This is the only telemetry rule.
