@@ -425,3 +425,8 @@ But my previous input wasn't seen in your output.
 
 Also, we need a clause in the readme that tells bots what to do if they can't log the inputs
 ```
+
+### 2026-09-14-H18
+```
+I want to update the readme on github.com/ivanferrier55/SpecuLoop so that it is a proper mumble file (semantic loop written in plain English that is llm facing with jump instructions that alow different outputs depending on the input) instead of what it is now
+```
