@@ -45,6 +45,16 @@ paraphrase. Do not skip turns.
 
 At the start of every response, show: `[logged {id} → telemetry/human-inputs.md]`
 
+If you cannot write to `telemetry/human-inputs.md` (no file access,
+read-only environment, file missing, or any other error):
+
+1. State clearly: `TELEMETRY UNAVAILABLE: {reason}`
+2. Output the human input in a code fence so it is visible in the conversation
+3. Instruct the human to paste it into `telemetry/human-inputs.md` manually
+
+Never silently skip logging. If you cannot log, say so and surface the input
+so it is not lost.
+
 ---
 
 **An experimental semantic system for letting AI generate, test, and refine knowledge without letting generated volume become semantic authority.**

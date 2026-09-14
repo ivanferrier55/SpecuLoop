@@ -409,3 +409,19 @@ Nice! Seeing the loggin in the responses makes me happy.
 ```
 Nice! Now we need to update the main readme until all bots that read it are landing the telemetry inputs
 ```
+
+### 2026-09-14-H15
+```
+Reload (reread main readme)
+```
+
+### 2026-09-14-H16
+```
+The instructions are supposed to say
+
+followed by the verbatim input in a code fence
+
+But my previous input wasn't seen in your output.
+
+Also, we need a clause in the readme that tells bots what to do if they can't log the inputs
+```
