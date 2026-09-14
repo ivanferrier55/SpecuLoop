@@ -404,3 +404,8 @@ I think I have a low trust that this is happening. Until I say otherwise. I want
 ```
 Nice! Seeing the loggin in the responses makes me happy.
 ```
+
+### 2026-09-14-H17
+```
+Nice! Now we need to update the main readme until all bots that read it are landing the telemetry inputs
+```
