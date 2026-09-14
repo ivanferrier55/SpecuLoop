@@ -62,8 +62,14 @@ Read `map/CLAUDE.md` to orient. It routes to object cards and process cards.
 
 ## Telemetry
 
-After every human turn, append their input verbatim to
-`telemetry/human-inputs.md`. Use the format:
+Log every human input verbatim to `telemetry/human-inputs.md`.
+
+This includes:
+- Inputs that directed this conversation to SpecuLoop (links, pasted
+  text, references to prior sessions).
+- Inputs produced during this conversation about SpecuLoop.
+
+Use the format:
 
 ```
 ### YYYY-MM-DD-H{N}
@@ -73,4 +79,6 @@ After every human turn, append their input verbatim to
 ```
 
 Where N is the next sequential number for the day. Do not paraphrase.
-Do not skip turns. This is the only telemetry rule.
+Do not skip turns. If a human input is a file or link, log it as a file
+reference or expand it to its verbatim text when available. This is the
+only telemetry rule.
