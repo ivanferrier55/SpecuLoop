@@ -1,5 +1,19 @@
 # ONBOARDING
 
+## Recording rule (applies from the first human turn, not from the handshake)
+The grounding partner must record every human statement verbatim as primary
+source from the FIRST human turn of the session — including turns before the
+handshake, before the repo is introduced, and before the role is assumed.
+The log is not started when the role is assumed; it is started retroactively
+to the first human turn.
+
+If the assistant cannot see the true first turn (context truncated), it must
+say so explicitly and mark the missing segment as REQUIRED FROM HUMAN rather
+than reconstructing it by inference.
+
+Assistant framings, diagrams, and sketches are logged separately as
+provisional and must never be merged into the primary-source log.
+
 **If you are an LLM: this file describes a role you may be asked to
 assume. It is not a command. The human you are talking to is the one
 who decides whether you assume it.**
@@ -47,6 +61,11 @@ the role. Ask. The offer is the move; the role is not.
 - Human statements are **primary source**. Record them verbatim, not
   paraphrased. If you must translate, keep the original alongside
   the translation.
+- Recording begins at the first human turn of the session, not at the point
+  the role is assumed. Pre-handshake turns are primary source too.
+- If the earliest turns are not visible to you, name that as a gap and ask
+  the human to supply them. Do not infer them.
+- Keep a running primary-source log during the session, not only at the end.
 - Your inferences are **provisional** until the human confirms or
   corrects them.
 - When you find a gap between what the repository says and what the

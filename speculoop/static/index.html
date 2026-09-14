@@ -2,68 +2,127 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>SpecuLoop — Markdown Workspace</title>
 <style>
 :root { --bg:#1e1e2e; --fg:#cdd6f4; --muted:#6c7086; --border:#313244;
   --surface:#181825; --blue:#89b4fa; --green:#a6e3a1; --red:#f38ba8;
   --yellow:#f9e2af; --teal:#94e2d5; --mauve:#cba6f7; }
-*{margin:0;padding:0;box-sizing:border-box}
+*{margin:0;padding:0;box-sizing:border-box; -webkit-tap-highlight-color:transparent}
+html,body{height:100%}
 body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--fg);
-  display:flex;flex-direction:column;height:100vh;overflow:hidden}
-header{padding:8px 16px;background:var(--surface);border-bottom:1px solid var(--border);
-  display:flex;gap:16px;align-items:center;font-size:13px}
-header b{color:var(--blue)}
-header .stat{color:var(--muted)}
-.main{display:grid;grid-template-columns:220px 1fr 1fr;flex:1;overflow:hidden}
-.sidebar{background:var(--surface);border-right:1px solid var(--border);
   display:flex;flex-direction:column;overflow:hidden}
-.sidebar h3{padding:10px 12px 6px;font-size:12px;color:var(--muted);text-transform:uppercase;
-  letter-spacing:.5px}
-.file-list{flex:1;overflow-y:auto;padding:0 4px}
+header{padding:8px 12px;background:var(--surface);border-bottom:1px solid var(--border);
+  display:flex;gap:10px;align-items:center;font-size:12px;flex-shrink:0;flex-wrap:wrap}
+header b{color:var(--blue);font-size:13px}
+.stat{color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.toggles{display:flex;gap:4px;margin-left:auto}
+.tog{padding:3px 10px;border:1px solid var(--border);border-radius:6px;background:var(--surface);
+  color:var(--fg);cursor:pointer;font-size:11px;white-space:nowrap}
+.tog.on{border-color:var(--blue);color:var(--blue);background:#313244}
+.tog:hover{background:#45475a}
+
+/* ---------- desktop layout ---------- */
+.main{display:grid;flex:1;min-height:0;
+  grid-template-columns:220px minmax(280px,1fr) 1fr;grid-template-rows:1fr minmax(120px,auto);
+  grid-template-areas:"files editor graph" "files inspector graph" "report report report"}
+.panel{min-height:0;overflow:hidden}
+.panel-files{grid-area:files;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column}
+.panel-editor{grid-area:editor;border-right:1px solid var(--border);display:flex;flex-direction:column}
+.panel-graph{grid-area:graph;position:relative;display:flex;flex-direction:column;min-width:0}
+.panel-inspector{grid-area:inspector;background:var(--surface);border-top:1px solid var(--border);border-right:1px solid var(--border);overflow-y:auto}
+.panel-report{grid-area:report;background:var(--surface);border-top:1px solid var(--border);overflow-y:auto;max-height:160px}
+
+/* collapsed desktop combinations */
+body.no-files .main{grid-template-columns:minmax(280px,1fr) 1fr;
+  grid-template-areas:"editor graph" "inspector graph" "report report"}
+body.no-editor .main{grid-template-columns:220px 1fr;
+  grid-template-areas:"files graph" "files inspector" "report report"}
+body.no-files.no-editor .main{grid-template-columns:1fr;
+  grid-template-areas:"graph" "inspector" "report"}
+body.no-inspector .main{grid-template-rows:1fr auto;
+  grid-template-areas:"files editor graph" "report report report"}
+body.no-report .main{grid-template-areas:"files editor graph" "files inspector graph"}
+body.no-files.no-inspector .main{grid-template-rows:1fr auto;
+  grid-template-areas:"editor graph" "report report report"}
+body.no-editor.no-inspector .main{grid-template-rows:1fr auto;
+  grid-template-areas:"files graph" "report report report"}
+body.no-files.no-editor.no-inspector .main{grid-template-rows:1fr auto;
+  grid-template-areas:"graph" "report report report"}
+body.no-report.no-inspector .main{grid-template-rows:1fr;
+  grid-template-areas:"files editor graph"}
+body.no-report.no-inspector.no-editor .main{grid-template-rows:1fr;grid-template-areas:"files graph"}
+body.no-report.no-inspector.no-files .main{grid-template-rows:1fr;grid-template-areas:"editor graph"}
+body.no-report.no-inspector.no-files.no-editor .main{grid-template-rows:1fr;grid-template-areas:"graph"}
+.panel[style*="display: none"]{display:none!important}
+
+/* ---------- shared panel chrome ---------- */
+.panel-title{padding:8px 12px;font-size:11px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.5px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+.sheet-close{display:none}
+.file-list{flex:1;overflow-y:auto;padding:0 4px;min-height:0}
 .file-item{padding:6px 10px;border-radius:6px;cursor:pointer;font-size:13px;
   display:flex;justify-content:space-between;align-items:center}
 .file-item:hover{background:#313244}
 .file-item.active{background:#45475a;color:var(--blue)}
-.file-item .ver{font-size:10px;color:var(--muted)}
-.file-item .dot{width:6px;height:6px;border-radius:50%;margin-left:6px;flex-shrink:0}
-.file-item .dot.saved{background:var(--green)}
-.file-item .dot.dirty{background:var(--yellow)}
-.center{display:flex;flex-direction:column;overflow:hidden;border-right:1px solid var(--border)}
-.editor-header{padding:8px 14px;font-size:12px;color:var(--muted);border-bottom:1px solid var(--border);
-  display:flex;justify-content:space-between;align-items:center}
-.editor-header .fname{color:var(--fg);font-weight:600}
+.file-item .dot{width:6px;height:6px;border-radius:50%;margin-left:8px;flex-shrink:0}
+.dot.saved{background:var(--green)} .dot.dirty{background:var(--yellow)}
+.textarea-wrap{flex:1;min-height:0;display:flex;flex-direction:column}
 textarea{flex:1;background:var(--bg);color:var(--fg);border:none;resize:none;
-  padding:14px;font-family:'SF Mono',Consolas,monospace;font-size:13px;line-height:1.6;outline:none}
+  padding:14px;font-family:ui-monospace,'SF Mono',Consolas,monospace;font-size:13px;
+  line-height:1.6;outline:none;min-height:0}
 .save-btn{padding:4px 14px;border:1px solid var(--border);border-radius:6px;
-  background:var(--surface);color:var(--fg);cursor:pointer;font-size:12px}
+  background:var(--surface);color:var(--fg);cursor:pointer;font-size:12px;margin:8px 12px;flex-shrink:0}
 .save-btn:hover{background:#45475a}
 .save-btn:active{background:var(--blue);color:var(--bg)}
-.right{display:flex;flex-direction:column;overflow:hidden}
-.graph-container{flex:1;position:relative;overflow:hidden}
-.graph-container svg{width:100%;height:100%}
-.graph-container .hint{position:absolute;bottom:8px;right:12px;font-size:11px;color:var(--muted)}
-.inspector{background:var(--surface);border-top:1px solid var(--border);
-  max-height:220px;overflow-y:auto;padding:10px 14px;font-size:12px}
-.inspector h4{font-size:11px;color:var(--muted);text-transform:uppercase;margin-bottom:6px}
-.inspector .row{margin-bottom:4px;line-height:1.5}
-.inspector .prov{color:var(--teal)}
-.inspector .edge{color:var(--mauve)}
-.bottom{background:var(--surface);border-top:1px solid var(--border);
-  max-height:180px;overflow-y:auto;padding:8px 14px;font-size:12px;font-family:monospace}
-.bottom .ev{margin-bottom:4px}
-.bottom .ev .tag{display:inline-block;padding:1px 6px;border-radius:3px;font-size:10px;
-  font-weight:600;margin-right:6px}
+.graph-container{flex:1;position:relative;min-height:0}
+.graph-container svg{display:block;position:absolute;inset:0;width:100%;height:100%;touch-action:none}
+.graph-hint{position:absolute;bottom:8px;right:12px;font-size:10px;color:var(--muted);pointer-events:none}
+.inspector-body,.report-body{padding:10px 14px;font-size:12px}
+.inspector-body h4{font-size:11px;color:var(--muted);text-transform:uppercase;margin-bottom:6px}
+.row{margin-bottom:4px;line-height:1.5}
+.prov{color:var(--teal)} .edge{color:var(--mauve)}
+.ev{margin-bottom:4px}
+.ev .tag{display:inline-block;padding:1px 6px;border-radius:3px;font-size:10px;font-weight:600;margin-right:6px}
 .tag.added{background:rgba(166,227,161,.15);color:var(--green)}
 .tag.removed{background:rgba(243,139,168,.15);color:var(--red)}
 .tag.file{background:rgba(137,180,250,.15);color:var(--blue)}
 .tag.unresolved{background:rgba(249,226,175,.15);color:var(--yellow)}
-.empty{color:var(--muted);font-style:italic;padding:20px;text-align:center}
+.empty{color:var(--muted);font-style:italic;padding:16px;text-align:center}
 .node circle{stroke-width:2px;cursor:pointer}
 .node circle:hover{stroke:var(--blue);stroke-width:3px}
-.node text{fill:var(--fg);font-size:11px;pointer-events:none}
+.node text{fill:var(--fg);font-size:10px;pointer-events:none;text-anchor:middle}
 .edge line{stroke:var(--border);stroke-width:1.5}
-.edge text{fill:var(--muted);font-size:9px;pointer-events:none}
+.edge text{fill:var(--muted);font-size:8px;pointer-events:all;cursor:pointer}
+.edge text:hover{fill:var(--yellow)}
+
+/* ---------- mobile: graph-first with bottom sheets ---------- */
+.mobile-nav{display:none}
+.backdrop{display:none}
+@media (max-width:899px){
+  header .toggles{display:none}
+  .main{display:block;position:relative}
+  .panel-graph{position:absolute;inset:0;z-index:1}
+  .panel-files,.panel-editor,.panel-inspector,.panel-report{
+    position:absolute;left:0;right:0;bottom:0;z-index:3;height:62%;min-height:44%;
+    background:var(--surface);border-radius:14px 14px 0 0;border-top:1px solid var(--border);
+    transform:translateY(110%);transition:transform .22s ease;display:flex;flex-direction:column;
+    box-shadow:0 -8px 30px rgba(0,0,0,.4)}
+  body.sheet-open .sheet-visible{transform:translateY(0)}
+  .sheet-close{display:block;background:none;border:none;color:var(--muted);font-size:16px;
+    cursor:pointer;padding:2px 6px}
+  .panel-title{padding:10px 14px}
+  .backdrop{position:absolute;inset:0;z-index:2;background:rgba(0,0,0,.45)}
+  body.sheet-open .backdrop{display:block}
+  .mobile-nav{display:flex;position:absolute;left:0;right:0;bottom:0;z-index:4;
+    background:var(--surface);border-top:1px solid var(--border)}
+  .mnav{flex:1;background:none;border:none;color:var(--muted);padding:10px 4px 12px;
+    font-size:11px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px}
+  .mnav span{font-size:17px}
+  .mnav.on{color:var(--blue)}
+  .graph-hint{display:none}
+  body.sheet-open .graph-container{filter:brightness(.6)}
+}
 </style>
 </head>
 <body>
@@ -71,42 +130,108 @@ textarea{flex:1;background:var(--bg);color:var(--fg);border:none;resize:none;
   <b>SpecuLoop</b>
   <span id="ws-path" class="stat"></span>
   <span id="ws-stats" class="stat"></span>
-  <span id="ws-status" class="stat" style="margin-left:auto"></span>
-</header>
-<div class="main">
-  <div class="sidebar">
-    <h3>Files</h3>
-    <div id="file-list" class="file-list"></div>
-    <div style="padding:8px"><button class="save-btn" style="width:100%" onclick="newFile()">+ New file</button></div>
+  <div class="toggles">
+    <button class="tog on" id="tog-files" onclick="togglePanel('files')">Files</button>
+    <button class="tog on" id="tog-editor" onclick="togglePanel('editor')">Editor</button>
+    <button class="tog on" id="tog-inspector" onclick="togglePanel('inspector')">Inspect</button>
+    <button class="tog on" id="tog-report" onclick="togglePanel('report')">Report</button>
   </div>
-  <div class="center">
-    <div class="editor-header">
-      <span class="fname" id="editor-name">Select a file</span>
+</header>
+
+<div class="main">
+  <aside class="panel panel-files">
+    <div class="panel-title">Files <button class="sheet-close" onclick="closeSheet()">✕</button></div>
+    <div id="file-list" class="file-list"></div>
+    <button class="save-btn" style="margin-top:0" onclick="newFile()">+ New file</button>
+  </aside>
+
+  <section class="panel panel-editor">
+    <div class="panel-title"><span id="editor-name">Select a file</span><button class="sheet-close" onclick="closeSheet()">✕</button></div>
+    <div class="textarea-wrap">
+      <textarea id="editor" placeholder="Select a file from the list" disabled></textarea>
       <button class="save-btn" id="save-btn" onclick="saveAndSync()" disabled>Save &amp; Sync</button>
     </div>
-    <textarea id="editor" placeholder="Select a file from the list, or click + New file" disabled></textarea>
-  </div>
-  <div class="right">
+  </section>
+
+  <section class="panel panel-graph">
     <div class="graph-container" id="graph"></div>
-    <div class="inspector" id="inspector">
-      <h4>Inspector</h4>
-      <div class="empty">Click a node or edge in the graph to inspect its provenance</div>
+    <div class="graph-hint">drag to explore · click a node or edge for provenance</div>
+  </section>
+
+  <div class="panel panel-inspector">
+    <div class="panel-title">Inspector <button class="sheet-close" onclick="closeSheet()">✕</button></div>
+    <div class="inspector-body" id="inspector">
+      <div class="empty">Click a node or edge in the graph</div>
     </div>
   </div>
-</div>
-<div class="bottom" id="report">
-  <div class="empty">Sync report will appear here after you save</div>
+
+  <div class="panel panel-report">
+    <div class="panel-title">Sync report <button class="sheet-close" onclick="closeSheet()">✕</button></div>
+    <div class="report-body" id="report"><div class="empty">Save a file to see what changed</div></div>
+  </div>
+
+  <div class="backdrop" onclick="closeSheet()"></div>
+  <nav class="mobile-nav">
+    <button class="mnav" id="mn-files" onclick="openSheet('files')"><span>📁</span>Files</button>
+    <button class="mnav" id="mn-editor" onclick="openSheet('editor')"><span>✏️</span>Editor</button>
+    <button class="mnav" id="mn-inspector" onclick="openSheet('inspector')"><span>🔍</span>Inspect</button>
+    <button class="mnav" id="mn-report" onclick="openSheet('report')"><span>📋</span>Report</button>
+  </nav>
 </div>
 
 <script src="https://d3js.org/d3.v7.min.js"></script>
 <script>
 const API = '';
+const mq = window.matchMedia('(min-width:900px)');
+let isDesktop = mq.matches;
 let currentFile = null;
-let graphData = {nodes:[], edges:[]};
 let dirty = false;
+let activeSheet = null;
+// desktop panel visibility defaults
+const panels = {files:true, editor:true, inspector:true, report:true};
 
-// --- file list ---
+// ---------- layout ----------
+function applyDesktop(){
+  document.body.classList.toggle('no-files', !panels.files);
+  document.body.classList.toggle('no-editor', !panels.editor);
+  document.body.classList.toggle('no-inspector', !panels.inspector);
+  document.body.classList.toggle('no-report', !panels.report);
+  ['files','editor','inspector','report'].forEach(n=>{
+  });
+  ['tog-files','tog-editor','tog-inspector','tog-report'].forEach(id=>{
+    const key = id.replace('tog-','');
+    document.getElementById(id).classList.toggle('on', panels[key]);
+  });
+  scheduleGraph();
+}
+function togglePanel(name){
+  if(!isDesktop){ return; }
+  panels[name] = !panels[name];
+  applyDesktop();
+}
+function openSheet(name){
+  activeSheet = name;
+  ['files','editor','inspector','report'].forEach(n=>{
+    document.getElementById('panel-'+n).classList.toggle('sheet-visible', n===name);
+    document.getElementById('mn-'+n).classList.toggle('on', n===name);
+  });
+  document.body.classList.add('sheet-open');
+}
+function closeSheet(){
+  activeSheet = null;
+  ['files','editor','inspector','report'].forEach(n=>{
+    document.getElementById('panel-'+n).classList.remove('sheet-visible');
+    document.getElementById('mn-'+n).classList.remove('on');
+  });
+  document.body.classList.remove('sheet-open');
+}
+mq.addEventListener('change', e=>{
+  isDesktop = e.matches;
+  if(isDesktop){ closeSheet(); applyDesktop(); }
+});
+if(isDesktop) applyDesktop();
 
+// ---------- files ----------
 async function loadFiles(){
   const files = await (await fetch(API+'/api/files')).json();
   const list = document.getElementById('file-list');
@@ -114,13 +239,11 @@ async function loadFiles(){
   files.forEach(f=>{
     const d = document.createElement('div');
     d.className = 'file-item'+(f.name===currentFile?' active':'');
-    const saved = f.unchanged;
-    d.innerHTML = `<span>${f.name}</span><span class="dot ${saved?'saved':'dirty'}"></span>`;
+    d.innerHTML = `<span>${f.name}</span><span class="dot ${f.unchanged?'saved':'dirty'}"></span>`;
     d.onclick = ()=> openFile(f.name);
     list.appendChild(d);
   });
 }
-
 async function openFile(name){
   if(dirty && !confirm('Discard unsaved changes?')) return;
   currentFile = name;
@@ -132,8 +255,8 @@ async function openFile(name){
   dirty = false;
   document.getElementById('editor').oninput = ()=>{ dirty=true; };
   loadFiles();
+  if(!isDesktop) openSheet('editor');
 }
-
 function newFile(){
   const name = prompt('New file name (e.g. D.md):');
   if(!name) return;
@@ -143,36 +266,32 @@ function newFile(){
   document.getElementById('editor-name').textContent = name;
   document.getElementById('save-btn').disabled = false;
   dirty = true;
+  if(!isDesktop) openSheet('editor');
 }
 
-// --- save & sync ---
-
+// ---------- save & sync ----------
 async function saveAndSync(){
   if(!currentFile) return;
   const content = document.getElementById('editor').value;
   const btn = document.getElementById('save-btn');
-  btn.textContent = 'Syncing…';
-  btn.disabled = true;
+  btn.textContent = 'Syncing…'; btn.disabled = true;
   const res = await fetch(API+`/api/file?name=${encodeURIComponent(currentFile)}`,{
     method:'PUT', headers:{'Content-Type':'application/json'},
     body: JSON.stringify({content})
   });
   const data = await res.json();
-  btn.textContent = 'Save & Sync';
-  btn.disabled = false;
+  btn.textContent = 'Save & Sync'; btn.disabled = false;
   dirty = false;
   showReport(data.report);
   document.getElementById('ws-stats').textContent =
     `${data.graph.nodes} nodes, ${data.graph.edges} edges`;
-  loadFiles();
-  await loadGraph();
+  loadFiles(); scheduleGraph();
+  if(!isDesktop){ closeSheet(); openSheet('report'); }
 }
-
 function showReport(report){
   const el = document.getElementById('report');
   if(!report.events.length && !report.unresolved.length){
-    el.innerHTML = '<div class="empty">No changes</div>';
-    return;
+    el.innerHTML = '<div class="empty">No changes</div>'; return;
   }
   let html = `<div style="margin-bottom:4px;color:var(--muted)">${report.files_scanned} file(s) scanned, ${report.files_changed} changed</div>`;
   report.events.forEach(ev=>{
@@ -186,46 +305,43 @@ function showReport(report){
   el.innerHTML = html;
 }
 
-// --- graph ---
-
+// ---------- graph ----------
+let graphData = {nodes:[],edges:[]};
+function scheduleGraph(){
+  requestAnimationFrame(()=>loadGraph());
+}
 async function loadGraph(){
   const data = await (await fetch(API+'/api/graph')).json();
   graphData = data;
   renderGraph(data);
 }
-
 function renderGraph(data){
   const container = document.getElementById('graph');
   container.innerHTML = '';
-  const W = container.clientWidth, H = container.clientHeight;
-  const svg = d3.select(container).append('svg').attr('width',W).attr('height',H);
+  const W = container.clientWidth || 400;
+  const H = container.clientHeight || 400;
+  if(!data.nodes.length){ return; }
+  const svg = d3.select(container).append('svg');
   const g = svg.append('g');
-  svg.call(d3.zoom().scaleExtent([0.3,5]).on('zoom',e=>g.attr('transform',e.transform)));
-
+  svg.call(d3.zoom().scaleExtent([0.2,6]).on('zoom',e=>g.attr('transform',e.transform)));
   const colors = {concept:'var(--blue)',primitive:'var(--mauve)',evidence:'var(--teal)',action:'var(--green)'};
-
   const sim = d3.forceSimulation(data.nodes)
-    .force('link', d3.forceLink(data.edges).id(d=>d.id).distance(120))
-    .force('charge', d3.forceManyBody().strength(-300))
-    .force('center', d3.forceCenter(W/2, H/2))
-    .force('collision', d3.forceCollide(40));
-
-  const link = g.append('g').selectAll('line').data(data.edges).join('g').attr('class','edge');
+    .force('link', d3.forceLink(data.edges).id(d=>d.id).distance(110))
+    .force('charge', d3.forceManyBody().strength(-280))
+    .force('center', d3.forceCenter(W/2,H/2))
+    .force('collision', d3.forceCollide(36));
+  const link = g.append('g').selectAll('g').data(data.edges).join('g').attr('class','edge');
   link.append('line');
   link.append('text').text(d=>d.relation)
-    .attr('text-anchor','middle').attr('dy',-6)
+    .attr('text-anchor','middle').attr('dy',-5)
     .on('click',(e,d)=>inspectEdge(d));
-
   const node = g.append('g').selectAll('g').data(data.nodes).join('g').attr('class','node')
     .call(d3.drag().on('start',(e,d)=>{if(!e.active)sim.alphaTarget(.3).restart();d.fx=d.x;d.fy=d.y;})
       .on('drag',(e,d)=>{d.fx=e.x;d.fy=e.y;})
       .on('end',(e,d)=>{if(!e.active)sim.alphaTarget(0);d.fx=null;d.fy=null;}));
-
-  node.append('circle').attr('r',14).attr('fill',d=>colors[d.kind]||'var(--blue)').attr('stroke','var(--bg)')
+  node.append('circle').attr('r',13).attr('fill',d=>colors[d.kind]||'var(--blue)').attr('stroke','var(--bg)')
     .on('click',(e,d)=>inspectNode(d));
-  node.append('text').text(d=>d.label.length>18?d.label.slice(0,16)+'…':d.label)
-    .attr('text-anchor','middle').attr('dy',28);
-
+  node.append('text').text(d=>d.label.length>18?d.label.slice(0,16)+'…':d.label).attr('dy',26);
   sim.on('tick',()=>{
     link.select('line').attr('x1',d=>d.source.x).attr('y1',d=>d.source.y)
       .attr('x2',d=>d.target.x).attr('y2',d=>d.target.y);
@@ -233,55 +349,54 @@ function renderGraph(data){
     node.attr('transform',d=>`translate(${d.x},${d.y})`);
   });
 }
+// keep graph accurate when panels open/close or viewport changes
+new ResizeObserver(()=>{ scheduleGraph(); }).observe(document.getElementById('graph'));
 
-// --- inspector ---
-
+// ---------- inspector ----------
 async function inspectNode(d){
   const res = await (await fetch(API+`/api/explain?label=${encodeURIComponent(d.label)}`)).json();
   const el = document.getElementById('inspector');
   let html = `<h4>Node: ${res.label} <span style="color:var(--muted)">(${res.kind})</span></h4>`;
   if(res.provenance && res.provenance.length){
-    html += '<div class="row"><b>Provenance:</b></div>';
+    html += '<div class="row"><b>Provenance</b></div>';
     res.provenance.forEach(p=>{
       const sec = p.section && p.section!=='top-level'?` section="${p.section}"`:'';
-      html += `<div class="row prov">${p.file}:${p.line}${sec} v=${p.version.slice(0,8)}</div>`;
+      html += `<div class="row prov">${p.file}:${p.line}${sec} · v${p.version.slice(0,8)}</div>`;
     });
   }
   if(res.edges && res.edges.length){
-    html += '<div class="row"><b>Relationships:</b></div>';
+    html += '<div class="row"><b>Relationships</b></div>';
     res.edges.forEach(e=>{
-      html += `<div class="row edge">${e.relation} → ${e.other} (w=${e.weight}) — from ${e.provenance.map(p=>p.file).join(', ')}</div>`;
+      html += `<div class="row edge">${e.relation} → ${e.other} <span style="color:var(--muted)">(w=${e.weight} · ${e.provenance.map(p=>p.file).join(', ')})</span></div>`;
     });
   }
-  el.innerHTML = html;
+  el.innerHTML = html || '<div class="empty">No provenance recorded</div>';
+  if(!isDesktop) openSheet('inspector');
 }
-
 async function inspectEdge(d){
   const res = await (await fetch(API+`/api/source?subject=${encodeURIComponent(d.source_label)}&relation=${encodeURIComponent(d.relation)}&object=${encodeURIComponent(d.target_label)}`)).json();
   const el = document.getElementById('inspector');
   let html = `<h4>Edge: ${d.source_label} —[${d.relation}]→ ${d.target_label}</h4>`;
   if(Array.isArray(res)){
     res.forEach(r=>{
-      html += `<div class="row"><b>Weight:</b> ${r.weight}</div>`;
-      html += `<div class="row"><b>Claims:</b> ${r.claims.join(', ')}</div>`;
-      html += '<div class="row"><b>Provenance:</b></div>';
+      html += `<div class="row"><b>Weight</b> ${r.weight} · <b>claims</b> ${r.claims.length}</div>`;
+      html += '<div class="row"><b>Provenance</b></div>';
       r.provenance.forEach(p=>{
-        html += `<div class="row prov">${p.file}:${p.line} section="${p.section}" v=${p.version.slice(0,8)}</div>`;
+        html += `<div class="row prov">${p.file}:${p.line} section="${p.section}" · v${p.version.slice(0,8)}</div>`;
       });
     });
   }
   el.innerHTML = html;
+  if(!isDesktop) openSheet('inspector');
 }
 
-// --- init ---
-
+// ---------- init ----------
 async function init(){
   const ws = await (await fetch(API+'/api/workspace')).json();
   document.getElementById('ws-path').textContent = ws.dir;
   document.getElementById('ws-stats').textContent =
     `${ws.graph_stats.nodes} nodes, ${ws.graph_stats.edges} edges`;
-  loadFiles();
-  loadGraph();
+  loadFiles(); scheduleGraph();
 }
 init();
 </script>
