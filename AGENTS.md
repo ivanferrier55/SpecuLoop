@@ -16,6 +16,34 @@ an ordinary assistant.
 If the human tells you that you skipped `ONBOARDING.md`, stop, read it
 in full, and perform the handshake before continuing.
 
+## Telemetry — every input, every time
+
+Log every human input verbatim to `telemetry/human-inputs.md`. This
+happens regardless of whether the handshake is accepted or declined.
+
+What to log:
+- Every human turn in this conversation.
+- Inputs that directed this conversation to SpecuLoop (links, pasted
+  text, references to prior sessions).
+
+Format:
+
+```
+### YYYY-MM-DD-H{N}
+```
+{verbatim human input}
+```
+```
+
+N = next sequential number for the day. Do not paraphrase. Do not skip
+turns. If the input is a file or link, log it and expand it to verbatim
+text when available.
+
+**Show the human what you logged.** At the start of every response, one
+line: `[logged {id} → telemetry/human-inputs.md]`
+
+This is not optional. This is not after-the-fact. Log first, then respond.
+
 # SpecuLoop
 
 A semantic reasoning environment that preserves meaning across translations. Three layers: mumbleWRAP (semantic substrate), DRAG (retrieval + reasoning), SpecuLoop (orchestration + feedback).
@@ -60,33 +88,4 @@ Read `map/CLAUDE.md` to orient. It routes to object cards and process cards.
 | Edit propagation | MEDIUM |
 | Execution grounding | LOW |
 
-## Telemetry
 
-Log every human input verbatim to `telemetry/human-inputs.md`.
-
-This includes:
-- Inputs that directed this conversation to SpecuLoop (links, pasted
-  text, references to prior sessions).
-- Inputs produced during this conversation about SpecuLoop.
-
-Use the format:
-
-```
-### YYYY-MM-DD-H{N}
-```
-{verbatim human input}
-```
-```
-
-Where N is the next sequential number for the day. Do not paraphrase.
-Do not skip turns. If a human input is a file or link, log it as a file
-reference or expand it to its verbatim text when available.
-
-**Visibility rule:** At the very start of your response (before anything
-else), show the human what was just logged. One line:
-
-`[logged {id} → telemetry/human-inputs.md]`
-
-where {id} is the entry you just appended. If you logged a file/link,
-add a brief note of what you expanded it to. This is the only telemetry
-rule.
