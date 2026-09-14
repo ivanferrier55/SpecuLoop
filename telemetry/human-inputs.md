@@ -370,3 +370,27 @@ Yes. And then make sure all inputs including this on and the last one and future
 | ChatGPT "Collect Whims" | 2 | 2026-09-14 | test |
 | Pasted text (dream recon) | 17 | 2026-09-14 | primary source |
 | **Total** | **45** | | |
+
+---
+
+## Source: Codex CLI session 2026-09-14 (continued)
+
+### 2026-09-14-H11
+```
+I think that session file is a prior attempt at  telemetry (as is clear by the H- meaning human) please migrate it to your system
+```
+
+### 2026-09-14-H12
+```
+Remove it. The system seems bloated as it is.  My main goal now is checking to make sure the main readme of the overall repo orients agents to how to use the telemetry well
+```
+
+### 2026-09-14-H13
+```
+No. I don't actually care about them reading it. That is a waste of tokens. I want to make it so that any llm reading the speculoop readme will know that any human inputs that they know about that directed them to the system should be logged and any human inputs based on the speculoop system should be logged as well
+```
+
+### 2026-09-14-H14
+```
+Keep working until every future input from this chat will be logged
+```
