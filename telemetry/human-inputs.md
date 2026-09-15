@@ -430,3 +430,27 @@ Also, we need a clause in the readme that tells bots what to do if they can't lo
 ```
 I want to update the readme on github.com/ivanferrier55/SpecuLoop so that it is a proper mumble file (semantic loop written in plain English that is llm facing with jump instructions that alow different outputs depending on the input) instead of what it is now
 ```
+
+---
+
+## Source: ChatGPT session "Conversation Pseudocode"
+URL: https://chatgpt.com/share/6aa93796-94a8-83e8-9185-8ff3dd7db126
+Extracted: 2026-09-15
+
+### 2026-09-15-C3
+```
+Telemetry section
+```
+
+### 2026-09-15-C4
+```
+Continue
+```
+
+### 2026-09-15-C-REQUIRED
+```
+MISSING — turns 1-21 of this conversation are not present in the saved/exported
+copy. The visible record starts at turn 22 (assistant), so the original user
+prompt(s) that directed this conversation to the SpecuLoop repository are
+REQUIRED FROM HUMAN. Do not reconstruct by inference.
+```
