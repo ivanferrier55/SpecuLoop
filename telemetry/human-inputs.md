@@ -417,3 +417,13 @@ Continue
 ```
 
 (Assistant turns 1–4 are provisional and not logged here.)
+
+### 2026-09-15-H19
+```
+It had around 10 human inputs
+```
+
+### 2026-09-15-H20
+```
+When I open the saved file, I can see everything. Let's build a tool that can get these chat human inputs.
+```
