@@ -375,26 +375,6 @@ Yes. And then make sure all inputs including this on and the last one and future
 
 ## Source: Codex CLI session 2026-09-14 (continued)
 
-### 2026-09-14-H11
-```
-I think that session file is a prior attempt at  telemetry (as is clear by the H- meaning human) please migrate it to your system
-```
-
-### 2026-09-14-H12
-```
-Remove it. The system seems bloated as it is.  My main goal now is checking to make sure the main readme of the overall repo orients agents to how to use the telemetry well
-```
-
-### 2026-09-14-H13
-```
-No. I don't actually care about them reading it. That is a waste of tokens. I want to make it so that any llm reading the speculoop readme will know that any human inputs that they know about that directed them to the system should be logged and any human inputs based on the speculoop system should be logged as well
-```
-
-### 2026-09-14-H14
-```
-Keep working until every future input from this chat will be logged
-```
-
 ### 2026-09-14-H15
 ```
 I think I have a low trust that this is happening. Until I say otherwise. I want it so that I can see in the outputs that when  an input comes in. It First gets logged but tell me how it is getting logged
@@ -410,22 +390,6 @@ Nice! Seeing the loggin in the responses makes me happy.
 Nice! Now we need to update the main readme until all bots that read it are landing the telemetry inputs
 ```
 
-### 2026-09-14-H15
-```
-Reload (reread main readme)
-```
-
-### 2026-09-14-H16
-```
-The instructions are supposed to say
-
-followed by the verbatim input in a code fence
-
-But my previous input wasn't seen in your output.
-
-Also, we need a clause in the readme that tells bots what to do if they can't log the inputs
-```
-
 ### 2026-09-14-H18
 ```
 I want to update the readme on github.com/ivanferrier55/SpecuLoop so that it is a proper mumble file (semantic loop written in plain English that is llm facing with jump instructions that alow different outputs depending on the input) instead of what it is now
@@ -437,20 +401,19 @@ I want to update the readme on github.com/ivanferrier55/SpecuLoop so that it is 
 URL: https://chatgpt.com/share/6aa93796-94a8-83e8-9185-8ff3dd7db126
 Extracted: 2026-09-15
 
-### 2026-09-15-C3
+### 2026-09-15-C1
+```
+Give me the pseudocode for how this conversation is supposed to go. Include your pseudocode thinking process and my pseudocode thinking process
+```
+
+### 2026-09-15-C2
 ```
 Telemetry section
 ```
 
-### 2026-09-15-C4
+### 2026-09-15-C3
 ```
 Continue
 ```
 
-### 2026-09-15-C-REQUIRED
-```
-MISSING — turns 1-21 of this conversation are not present in the saved/exported
-copy. The visible record starts at turn 22 (assistant), so the original user
-prompt(s) that directed this conversation to the SpecuLoop repository are
-REQUIRED FROM HUMAN. Do not reconstruct by inference.
-```
+(Assistant turns 1–4 are provisional and not logged here.)
